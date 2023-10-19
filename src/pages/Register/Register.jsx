@@ -53,13 +53,13 @@ export const Register = () => {
             </div>
             <div className="password-wrapper">
               <input
-                className="input password-input"
+                className="password-input"
                 type={passwordVisible ? "text" : "password"}
                 placeholder="Password"
               />
               <img
                 className="toggle-password"
-                src={passwordVisible ? eyeOff : eyeOn}
+                src={passwordVisible ? eyeOn : eyeOff}
                 alt="toggle visibility"
                 onClick={togglePasswordVisibility}
               />

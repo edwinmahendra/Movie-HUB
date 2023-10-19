@@ -19,19 +19,21 @@ export const Login = () => {
           <div className="text-wrapper-5">Sign in</div>
           <div className="overlap-group">
             <input className="input" type="email" placeholder="Email" />
+
             <div className="password-wrapper">
-  <input 
-    className="input password-input" 
-    type={passwordVisible ? "text" : "password"} 
-    placeholder="Password"
-  />
-  <img 
-    className="toggle-password" 
-    src={passwordVisible ? eyeOff : eyeOn} 
-    alt="toggle visibility"
-    onClick={togglePasswordVisibility}
-  />
-</div>
+              <input
+                className="input password-input"
+                type={passwordVisible ? "text" : "password"}
+                placeholder="Password"
+              />
+              <img
+                className="toggle-password"
+                src={passwordVisible ? eyeOn : eyeOff}
+                alt="toggle visibility"
+                onClick={togglePasswordVisibility}
+              />
+            </div>
+            
             <button className="signup-button">Sign in</button>
             <div className="text-wrapper-2">
               New to MovieHub?{" "}

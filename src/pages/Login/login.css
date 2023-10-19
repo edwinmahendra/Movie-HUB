@@ -1,7 +1,6 @@
 .login {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    /* Adjusted column ratios */
     grid-template-rows: auto;
     align-items: center;
     height: 100vh;
@@ -31,7 +30,6 @@
 .login .input {
     background-color: #555555b2;
     border: none;
-    /* Removed the white border */
     border-radius: 10px;
     color: #c1c1c1;
     font-family: "Inter-Bold", Helvetica;
@@ -40,8 +38,6 @@
     padding: 20px;
     outline: none;
     width: 100%;
-    backdrop-filter: blur(5px);
-    /* Added blur effect */
 }
 
 input[type="text"],
@@ -101,7 +97,6 @@ p,
     color: #6680c0;
 }
 
-/* "Sign in" title */
 .login .text-wrapper-5 {
     color: #ffffff;
     font-family: "Inter-Bold", Helvetica;
@@ -143,4 +138,8 @@ p,
     width: 40px;
     height: 40px;
     cursor: pointer;
+}
+
+.password-wrapper .password-input {
+    padding-right: 75px;
 }

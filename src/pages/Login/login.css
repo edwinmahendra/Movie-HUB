@@ -21,7 +21,6 @@
     background-color: rgba(255, 255, 255, 0.2);
     border-radius: 10px;
     width: 700px;
-    /* Added this to make the box wider */
     padding: 80px;
     display: flex;
     flex-direction: column;
@@ -51,14 +50,12 @@ button {
     margin-bottom: 20px;
 }
 
-/* Add distance between input fields and the button */
 input[type="text"],
 input[type="password"],
 button {
     margin-bottom: 40px;
 }
 
-/* If the "Already have an account? Sign up" is a paragraph or another text element, you can use: */
 p,
 .signup-text {
     margin-top: 20px;
@@ -77,7 +74,6 @@ p,
     width: 100%;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    /* Smooth transition on hover */
 }
 
 .signup-button:hover {
@@ -99,7 +95,6 @@ p,
     font-weight: 600;
     cursor: pointer;
     transition: color 0.3s ease;
-    /* Smooth transition on hover */
 }
 
 .login .text-wrapper-3:hover {
@@ -113,7 +108,6 @@ p,
     font-size: 60px;
     font-weight: 700;
     margin-bottom: 30px;
-    /* Add some spacing below the title */
 }
 
 .input-with-icon {
@@ -127,33 +121,26 @@ p,
     transform: translateY(-50%);
     cursor: pointer;
     width: 24px;
-    /* Adjust width as necessary */
     height: 24px;
-    /* Adjust height as necessary */
 }
 
 .password-wrapper {
     position: relative;
     display: inline-block;
     width: 100%;
-    /* Adjust as needed */
 }
 
 .password-input {
     width: 100%;
     padding-right: 40px;
-    /* This makes space for the eye icon */
 }
 
 .toggle-password {
     position: absolute;
     right: 20px;
-    /* Adjust to position the icon inside the password field */
     top: 35%;
     transform: translateY(-50%);
     width: 40px;
-    /* Adjust for icon size */
     height: 40px;
-    /* Adjust for icon size */
     cursor: pointer;
 }

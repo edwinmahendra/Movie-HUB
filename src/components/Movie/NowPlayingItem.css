@@ -1,0 +1,31 @@
+.now-playing-container {
+    width:24%;
+    height: 15%;
+    background-color: #19161F;
+}
+
+.now-playing-container img {
+    width: 100%;
+    height: 70%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.now-playing-container .card-body{
+    padding: 0.5rem 0 0 0;
+}
+
+.now-playing-container .card-title{
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    margin: 0 0 0.3rem 0;
+    padding: 0;
+}
+
+.now-playing-container .card-text{
+    font-size: 0.8rem;
+    color: #767479;
+    margin: 0;
+    padding: 0;
+}

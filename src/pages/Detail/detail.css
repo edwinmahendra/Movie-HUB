@@ -1,0 +1,290 @@
+body, html {
+    overflow-x: hidden;
+}
+
+.detail-movie {
+    background-color: #171b1c;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    max-width: 100%;  /* Ensures the width doesn't exceed the viewport */
+}
+
+.detail-movie .div {
+    background-color: #171b1c;
+    height: 2532px;
+    position: relative;
+    width: 100%;
+    /* updated to 100% */
+}
+
+.detail-movie .overlap-group {
+    height: 2381px;
+    position: absolute;
+    top: 151px;
+    width: 100%;
+    /* make sure the width is 100% */
+    padding: 0;
+    /* ensure no padding */
+}
+
+.detail-movie .rectangle {
+    background-color: #ffffff;
+    border-radius: 20px 20px 0px 0px;
+    height: 2260px;
+    position: absolute;
+    top: 121px;
+    width: 100%;
+    box-sizing: border-box;  /* This ensures padding and border are included in the total width */
+    padding: 0 15px;  /* Give some padding to the content inside the rectangle */
+}
+
+.detail-movie .main-image {
+    height: 414px;
+    left: 98px;
+    position: absolute;
+    top: -30px;
+    width: 331px;
+}
+
+.detail-movie .game-of-thrones {
+    color: #000000;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 40px;
+    font-weight: 400;
+    left: 475px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 163px;
+    width: 460px;
+}
+
+.detail-movie .text-wrapper {
+    font-weight: 700;
+}
+
+.detail-movie .span {
+    font-family: "Inter-Regular", Helvetica;
+}
+
+.detail-movie .text-wrapper-2 {
+    color: #6680c0;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 20px;
+    font-weight: 700;
+    left: 475px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 283px;
+    white-space: nowrap;
+    width: 162px;
+}
+
+.detail-movie .text-wrapper-3 {
+    color: #000000;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 20px;
+    font-weight: 700;
+    left: 475px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 321px;
+    white-space: nowrap;
+    width: 162px;
+}
+
+.detail-movie .text-wrapper-4 {
+    color: #000000;
+    font-family: "Inter-Regular", Helvetica;
+    font-size: 20px;
+    font-weight: 400;
+    left: 475px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 349px;
+    white-space: nowrap;
+    width: 162px;
+}
+
+.detail-movie .text-wrapper-5 {
+    color: #000000;
+    font-family: "Inter-Regular", Helvetica;
+    font-size: 20px;
+    font-weight: 400;
+    left: 637px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 349px;
+    white-space: nowrap;
+    width: 162px;
+}
+
+.detail-movie .sci-fi-fantasy-drama {
+    color: #000000;
+    font-family: "Inter-Regular", Helvetica;
+    font-size: 20px;
+    font-weight: 400;
+    left: 602px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 214px;
+    white-space: nowrap;
+    width: 460px;
+}
+
+.detail-movie .text-wrapper-6 {
+    color: #000000;
+    font-family: "Inter-SemiBold", Helvetica;
+    font-size: 20px;
+    font-weight: 600;
+    left: 475px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 234px;
+    /* This value was updated to align with .sci-fi-fantasy-drama */
+    white-space: nowrap;
+    width: 460px;
+}
+
+.detail-movie .bookmark-instance {
+    height: 60px !important;
+    left: 1585px !important;
+    position: absolute !important;
+    top: 171px !important;
+    width: 60px !important;
+}
+
+.detail-movie .arrow-left {
+    height: 40px !important;
+    left: 108px !important;
+    position: absolute !important;
+    top: 69px !important;
+    width: 40px !important;
+}
+
+.detail-movie .text-wrapper-7 {
+    color: #ffffff;
+    font-family: "Inter-Regular", Helvetica;
+    font-size: 25px;
+    font-weight: 400;
+    left: 170px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 73px;
+    white-space: nowrap;
+}
+
+.detail-movie .text-wrapper-8 {
+    color: #000000;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 30px;
+    font-weight: 700;
+    left: 108px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 600px;
+    white-space: nowrap;
+    width: 460px;
+}
+
+.detail-movie .seven-noble-families {
+    color: #000000;
+    font-family: "Inter-Regular", Helvetica;
+    font-size: 20px;
+    font-weight: 400;
+    left: 108px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 630px;
+    width: 1561px;
+}
+
+.detail-movie .text-wrapper-9 {
+    color: #000000;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 30px;
+    font-weight: 700;
+    left: 108px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 750px;
+    white-space: nowrap;
+    width: 460px;
+}
+
+.detail-movie .cast-section {
+    /* This will ensure that the content inside follows the regular document flow */
+    width: 100%;
+    display: block;
+    margin-top: 790px;
+}
+
+.cast-label {
+    color: #000000;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 30px;
+    font-weight: 700;
+    left: 108px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 740px;
+    white-space: nowrap;
+    width: 460px;
+}
+
+.container-cast {
+    display: flex;
+    flex-wrap: nowrap; /* Do not wrap items to the next line */
+    justify-content: flex-start; /* Start items from the left */
+    margin-top: 20px;
+    overflow-x: auto; /* Allow horizontal scrolling */
+    overflow-y: hidden; /* Prevent vertical scrolling */
+    width: 100%;
+    padding-bottom: 20px;
+    scrollbar-width: thin;
+    scrollbar-color: #888 #444;
+    margin-left: 102px;
+    padding-right: 20px; /* Adjust this value to your preference */
+    box-sizing: content-box; /* To ensure padding doesn't affect the total width */
+}
+
+.container-cast::-webkit-scrollbar {
+    height: 8px;
+}
+
+.container-cast::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 4px;
+}
+
+.container-cast::-webkit-scrollbar-track {
+    background-color: #444;
+}
+
+.cast-card {
+    /* Assuming this is the class for your individual cast cards */
+    flex: 0 0 215px; /* Flex-grow is 0, flex-shrink is 0, and the flex-basis (width) is 215px */
+    margin-right: 20px;
+    /* Add any other styles you want for the individual cast cards here */
+}
+
+.container-cast .cast-card:last-of-type {
+    margin-right: 300px; /* Remove margin for the last card */
+}
+
+.container-cast .cast-card:first-of-type {
+    margin-left: 10px;  /* Reset the left margin of the first card */
+}

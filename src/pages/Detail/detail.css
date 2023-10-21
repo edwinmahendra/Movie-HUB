@@ -440,3 +440,52 @@ body, html {
     margin-left: auto;  
     padding-right: 30px;  
   }
+
+  .box {
+    height: 79px;
+    width: 498px;
+    position: absolute; 
+    right: 60px; 
+    z-index: 1000; 
+  }
+
+  
+  
+  .box .overlap-group2 {
+    background-color: #555555b2;
+    border-radius: 10px;
+    height: 79px;
+    position: relative;
+    top: 30px;
+    width: 498px;
+    display: flex;          
+    align-items: center;   
+}
+
+.box .search-input {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 25px;
+    font-weight: 700;
+    padding-left: 35px;
+    padding-right: 20px;
+    width: 437px;
+    border-radius: 10px 0 0 10px;
+    outline: none;
+}
+
+.box .search-instance {
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+    margin-left: auto;      
+    margin-right: 20px;}
+
+.bookmark-icon {
+    position: absolute; 
+    top: 175px;         
+    right: 50px;
+    cursor: pointer;   
+  }

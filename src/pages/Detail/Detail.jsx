@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import "./detail.css";
 import logo from "../../assets/logo.svg";
+import search from "../../assets/search.svg";
 import instagram from "../../assets/instagram.svg";
 import facebook from "../../assets/facebook.png";
 import twitter from "../../assets/twitter.svg";
@@ -10,13 +11,39 @@ import CastItem from "../../components/Cast/CastItem";
 import TrailerItem from "../../components/Trailer/TrailerItem";
 import RecommendationItem from "../../components/Recommendation/RecommendationItem";
 
+import bookmark1 from "../../assets/bookmark_1.svg";
+import bookmark2 from "../../assets/bookmark_2.svg";
+
 export const Detail = () => {
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const toggleBookmark = () => {
+    setIsBookmarked((prev) => !prev);
+  };
+
   return (
     <div className="detail-movie">
       <div className="div">
+        <div className="box">
+          <div className="group">
+            <div className="overlap-group2">
+              <input
+                type="text"
+                placeholder="Search"
+                className="search-input"
+              />
+              <img src={search} alt="Search" className="search-instance" />
+            </div>
+          </div>
+        </div>
         <div className="overlap-group">
           <div className="rectangle" />
           <img className="main-image" alt="main image" src={mainimage} />
+          <img
+            className="bookmark-icon"
+            alt="Bookmark Icon"
+            src={isBookmarked ? bookmark1 : bookmark2}
+            onClick={toggleBookmark}
+          />
           <p className="game-of-thrones">
             <span className="text-wrapper">Game of Thrones </span>
             <span className="span">(2011)</span>
@@ -90,19 +117,27 @@ export const Detail = () => {
           </div>
         </div>
         <div className="footer-box">
-    <div className="footer-left">
-        <img className="aatbio-com-image" alt="Aatbio com image" src={logo} />
-    </div>
-    <div className="footer-center">
-        <img className="icon-instagram" alt="Instagram icon" src={instagram} />
-        <img className="icon-youtube" alt="Youtube icon" src={youtube} />
-        <img className="icon-twitter" alt="Twitter icon" src={twitter} />
-        <img className="icon-facebook" alt="Facebook icon" src={facebook} />
-    </div>
-    <div className="footer-right">
-        <p className="footer-text-wrapper">© 2023 - AGB Company.</p>
-    </div>
-</div>
+          <div className="footer-left">
+            <img
+              className="aatbio-com-image"
+              alt="Aatbio com image"
+              src={logo}
+            />
+          </div>
+          <div className="footer-center">
+            <img
+              className="icon-instagram"
+              alt="Instagram icon"
+              src={instagram}
+            />
+            <img className="icon-youtube" alt="Youtube icon" src={youtube} />
+            <img className="icon-twitter" alt="Twitter icon" src={twitter} />
+            <img className="icon-facebook" alt="Facebook icon" src={facebook} />
+          </div>
+          <div className="footer-right">
+            <p className="footer-text-wrapper">© 2023 - AGB Company.</p>
+          </div>
+        </div>
       </div>
     </div>
   );

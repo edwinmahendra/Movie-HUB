@@ -4,6 +4,7 @@ import Blank from "../pages/Blank";
 import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
+import Bookmark from "../pages/Bookmark/Bookmark";
 import Profile from "../pages/Profile/Profile";
 import EditPicture from "../pages/Profile/EditPicture";
 
@@ -14,7 +15,7 @@ const Router = () => {
                 <Route path="/" element={<AppLayout />}>
                     <Route index element={<Home />} />
                     <Route path="/home" element={<Home />} />
-                    <Route path="/bookmark" element={<Blank />} />
+                    <Route path="/bookmark" element={<Bookmark />} />
                     <Route path="/logout" element={<Blank />} />
                 </Route>
                 <Route path="/login" element={<Login />} />

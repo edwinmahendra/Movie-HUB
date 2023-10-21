@@ -1,0 +1,26 @@
+.container{
+    z-index: 1;
+    width: 30000px;
+    position: relative;
+}
+
+.sorting-dropdown{
+    transform: translateX(+80%);
+    z-index: 2;;
+    position: relative;
+}
+
+#sorting-dropdown{
+    background-color: #555555 ;
+    border-color: #555555;
+
+}
+
+.titlePage{
+    color: white;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 40px;
+    margin-top: 60px;
+    margin-left: 80px;
+    font-weight: bold;
+}

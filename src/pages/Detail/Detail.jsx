@@ -2,6 +2,8 @@ import React from "react";
 import "./detail.css";
 import mainimage from "../../assets/mainimage.png";
 import CastItem from "../../components/Cast/CastItem";
+import TrailerItem from "../../components/Trailer/TrailerItem";
+import RecommendationItem from "../../components/Recommendation/RecommendationItem";
 
 export const Detail = () => {
   return (
@@ -54,6 +56,33 @@ export const Detail = () => {
             <CastItem />
             <CastItem />
             <CastItem />
+          </div>
+        </div>
+        <div class="trailer-section">
+          <h2 class="trailer-label">Trailer Movie</h2>
+          <div class="container-trailer">
+            <TrailerItem />
+            <TrailerItem />
+            <TrailerItem />
+            <TrailerItem />
+          </div>
+        </div>
+        <hr class="line" />
+        <div class="recommendation-section">
+          <h2 class="recommendation-label">Recommendation</h2>
+          <div class="container-recommendation">
+            <RecommendationItem />
+            <RecommendationItem />
+            <RecommendationItem />
+            <RecommendationItem />
+            <RecommendationItem />
+            <RecommendationItem />
+            <RecommendationItem />
+            <RecommendationItem />
+            <RecommendationItem />
+            <RecommendationItem />
+            <RecommendationItem />
+            <RecommendationItem />
           </div>
         </div>
       </div>

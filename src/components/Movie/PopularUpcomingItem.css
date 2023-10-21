@@ -1,0 +1,31 @@
+.popular-container {
+    width: 13%;
+    height: 15%;
+    background-color: #19161F;
+}
+
+.popular-container img {
+    width: 100%;
+    height: 70%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.popular-container .card-body{
+    padding: 0.5rem 0 0 0;
+}
+
+.popular-container .card-title{
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    margin: 0 0 0.3rem 0;
+    padding: 0;
+}
+
+.popular-container .card-text{
+    font-size: 0.8rem;
+    color: #767479;
+    margin: 0.5rem 0;
+    padding: 0;
+}

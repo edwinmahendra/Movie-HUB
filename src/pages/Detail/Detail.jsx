@@ -1,5 +1,10 @@
 import React from "react";
 import "./detail.css";
+import logo from "../../assets/logo.svg";
+import instagram from "../../assets/instagram.svg";
+import facebook from "../../assets/facebook.png";
+import twitter from "../../assets/twitter.svg";
+import youtube from "../../assets/youtube.svg";
 import mainimage from "../../assets/mainimage.png";
 import CastItem from "../../components/Cast/CastItem";
 import TrailerItem from "../../components/Trailer/TrailerItem";
@@ -24,7 +29,6 @@ export const Detail = () => {
           </p>
           <div className="text-wrapper-6">04/17/2011 |</div>
         </div>
-        <div className="text-wrapper-7">Home</div>
         <div className="text-wrapper-8">Movie Overview</div>
         <p className="seven-noble-families">
           Seven noble families fight for control of the mythical land of
@@ -85,6 +89,20 @@ export const Detail = () => {
             <RecommendationItem />
           </div>
         </div>
+        <div className="footer-box">
+    <div className="footer-left">
+        <img className="aatbio-com-image" alt="Aatbio com image" src={logo} />
+    </div>
+    <div className="footer-center">
+        <img className="icon-instagram" alt="Instagram icon" src={instagram} />
+        <img className="icon-youtube" alt="Youtube icon" src={youtube} />
+        <img className="icon-twitter" alt="Twitter icon" src={twitter} />
+        <img className="icon-facebook" alt="Facebook icon" src={facebook} />
+    </div>
+    <div className="footer-right">
+        <p className="footer-text-wrapper">© 2023 - AGB Company.</p>
+    </div>
+</div>
       </div>
     </div>
   );

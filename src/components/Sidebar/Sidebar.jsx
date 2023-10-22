@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaHome, FaAngleRight, FaBookmark,  } from "react-icons/fa";
 import { LuLogOut } from "react-icons/lu";
 import logo from "../../assets/logo.svg";
@@ -84,12 +84,17 @@ const Sidebar = () => {
 }
 
 const ProfileSidebar = ({photoUrl, name, email}) => {
+    const navigate = useNavigate();
+    const handleClick = () => {
+        navigate("/profile");
+    };
+
     return (
         <div className="profile_sidebar">
-            <img className='img_profile' src="https://via.placeholder.com/50x50" />
+            <img className='img_profile' src="https://via.placeholder.com/50x50" style={{cursor: 'pointer'}} onClick={handleClick}/>
             <div className='detail_profile'>
-                <p>Johny Andrean</p>
-                <p>markjhony@gmail.com</p>
+                <span style={{cursor: 'pointer'}} onClick={handleClick}>Johny Andrean</span>
+                <span>markjhony@gmail.com</span>
             </div>
         </div>
     );

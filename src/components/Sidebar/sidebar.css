@@ -75,10 +75,11 @@
 .detail_profile{
     margin-left: 12px;
 }
-.profile_sidebar p{
+.profile_sidebar span{
+    display: block;
     margin-bottom: 0;
 }
-.profile_sidebar p:nth-child(2){
+.profile_sidebar span:nth-child(2){
     font-size: 0.7rem;
     color: #767479;
 }

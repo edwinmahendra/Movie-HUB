@@ -3,15 +3,36 @@ import EditProfile from "../../components/Profile/EditProfile";
 import ProfilePicture from "../../components/Profile/ProfilePicture";
 import { Row, Col, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import ButtonBackHome from "../../components/Profile/ButtonBackHome";
 
 const Profile = () => {
   const navigate = useNavigate();
-  const handleCancel = () => navigate("/profile");
-  const handleSave = () => navigate("/profile");
+  const handleCancel = () => {
+    showCancelToast();
+  };
+  const handleSave = () => {
+    showSuccessToast();
+  };
+
+  const showSuccessToast = () => {
+    toast.success('Profile Updated Successfully', {
+        position: toast.POSITION.TOP_RIGHT
+    });
+  };
+
+  const showCancelToast = () => {
+    toast.error('Edit Profile Cancelled', {
+        position: toast.POSITION.TOP_RIGHT
+    });
+  };
 
   return (
     <div>
+      <ToastContainer />
       <div className="header-profile">
+        <ButtonBackHome />
         <ProfilePicture />
       </div>
 

@@ -1,5 +1,5 @@
 .header-profile{
-    height: 15vh;
+    height: 25vh;
     background-color: #19161F;
 }
 .header-profile img{
@@ -8,10 +8,14 @@
     margin-top: 2rem;
     margin-left: 3rem;
 }
+.header-profile div:nth-child(1){
+    margin-top: 2rem;
+    margin-left: 4rem;
+}
 .body-profile{
     display: flex;
     justify-content: flex-end;
-    height: 85vh;
+    height: 75vh;
     background-color: white;
     border-top-left-radius: 1rem;
     border-top-right-radius: 1rem;

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./detail.css";
 import logo from "../../assets/logo.svg";
-import search from "../../assets/search.svg";
 import instagram from "../../assets/instagram.svg";
 import facebook from "../../assets/facebook.png";
 import twitter from "../../assets/twitter.svg";
@@ -10,9 +9,10 @@ import mainimage from "../../assets/mainimage.png";
 import CastItem from "../../components/Cast/CastItem";
 import TrailerItem from "../../components/Trailer/TrailerItem";
 import RecommendationItem from "../../components/Recommendation/RecommendationItem";
-
+import SearchBar from "../../components/Movie/SearchBar";
 import bookmark1 from "../../assets/bookmark_1.svg";
 import bookmark2 from "../../assets/bookmark_2.svg";
+import ButtonBackHome from "../../components/Profile/ButtonBackHome";
 
 export const Detail = () => {
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -24,15 +24,11 @@ export const Detail = () => {
     <div className="detail-movie">
       <div className="div">
         <div className="box">
+          <div className="btn-home-detail">
+            <ButtonBackHome/>
+          </div>
           <div className="group">
-            <div className="overlap-group2">
-              <input
-                type="text"
-                placeholder="Search"
-                className="search-input"
-              />
-              <img src={search} alt="Search" className="search-instance" />
-            </div>
+            <SearchBar />
           </div>
         </div>
         <div className="overlap-group">

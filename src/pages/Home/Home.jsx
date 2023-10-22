@@ -3,7 +3,8 @@ import "./home.css";
 import NowPlayingItem from "../../components/Movie/NowPlayingItem";
 import PopularUpcomingItem from "../../components/Movie/PopularUpcomingItem";
 import TopRated from "../../components/Movie/TopRatedItem";
-import { Button, InputGroup, Form } from "react-bootstrap";
+import { Button, } from "react-bootstrap";
+import SearchBar from "../../components/Movie/SearchBar";
 
 export default function Home() {
     const [show, setShow] = useState(false);
@@ -13,18 +14,8 @@ export default function Home() {
 
     return (
       <div>
-        <div className="search-input">
-          <InputGroup className="mb-3">
-            <Form.Control
-              placeholder="Search"
-              aria-label="Search"
-              aria-describedby="basic-addon2"
-              className="shadow-none"
-            />
-            <Button variant="primary" id="button-search" className="shadow-none">
-              🔍
-            </Button>
-          </InputGroup>
+        <div className="container-search-home">
+          <SearchBar />
         </div>
 
         <div className="title-section">

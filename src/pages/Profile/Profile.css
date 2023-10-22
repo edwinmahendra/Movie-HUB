@@ -1,0 +1,21 @@
+.header-profile{
+    height: 15vh;
+    background-color: #19161F;
+}
+.header-profile img{
+    width: 200px;
+    height: 200px;
+    margin-top: 2rem;
+    margin-left: 3rem;
+}
+.body-profile{
+    display: flex;
+    justify-content: flex-end;
+    height: 85vh;
+    background-color: white;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+}
+.field-edit-profile{
+    width: 80%;
+}

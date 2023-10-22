@@ -37,13 +37,13 @@
   border: none;
 }
 
-.search-input .btn-primary:hover,.btn-primary:focus,.btn-primary:active, 
+/* .search-input .btn-primary:hover,.btn-primary:focus,.btn-primary:active, 
 .btn-primary:active:focus:not(:disabled):not(.disabled),
 .btn:focus, .btn:active, .btn:hover {
   background-color: #221E2A;
   box-shadow: none!important;
   outline: 0;
-}
+} */
 
 
 .title-section{

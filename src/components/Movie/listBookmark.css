@@ -1,0 +1,46 @@
+.posterImg{
+    max-height: fit-content;
+    max-width: fit-content;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.image{
+    margin-top: 20px;
+    display: grid ;
+    height: fit-content;
+    width: 98%;
+    border-radius: 0%;
+    grid-template-columns: 0.2fr 1fr;
+    column-gap: 10px;
+    left: 0px;
+    border-radius: 20px;
+}
+
+#sinopsis{
+    font-size: 25px;
+}
+
+#movie-date{
+    margin-top: 0%;
+    font-size: 25px;
+    color: #767479;
+
+}
+
+#title{
+    margin-bottom: 0%;
+    display: grid ;
+    font-weight: bold;
+    font-size: 30px;
+    grid-template-columns: 5fr 0fr;
+}
+
+.bookmark{
+    float: inline-end;
+}
+
+#date-added{
+    font-size: 20px;
+    
+}

@@ -1,0 +1,145 @@
+.login {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: auto;
+    align-items: center;
+    height: 100vh;
+    background-image: url(../../assets/loginbg.svg);
+    background-size: cover;
+    background-position: center;
+    padding: 0 10%;
+}
+
+.login .aatbio-com-image {
+    height: 150px;
+    width: 384px;
+    grid-column: 1;
+}
+
+.login .overlap {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    width: 700px;
+    padding: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    grid-column: 2;
+}
+
+.login .input {
+    background-color: #555555b2;
+    border: none;
+    border-radius: 10px;
+    color: #c1c1c1;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 25px;
+    font-weight: 600;
+    padding: 20px;
+    outline: none;
+    width: 100%;
+}
+
+input[type="text"],
+input[type="email"],
+button {
+    margin-bottom: 20px;
+}
+
+input[type="text"],
+input[type="password"],
+button {
+    margin-bottom: 40px;
+}
+
+p,
+.signup-text {
+    margin-top: 20px;
+}
+
+/* Adjusting styles for the Sign in button */
+.signup-button {
+    background-color: #6680c0;
+    border: none;
+    border-radius: 10px;
+    color: #ffffff;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 25px;
+    font-weight: 700;
+    padding: 20px 20px;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.signup-button:hover {
+    background-color: #556699;
+}
+
+/* Adjusting styles for the "Already have an account? Sign up" text */
+.login .text-wrapper-2 {
+    color: #767479;
+    font-family: "Inter-Medium", Helvetica;
+    font-size: 25px;
+    text-align: right;
+}
+
+.login .text-wrapper-3 {
+    color: #ffffff;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.login .text-wrapper-3:hover {
+    color: #6680c0;
+}
+
+.login .text-wrapper-5 {
+    color: #ffffff;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 60px;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.input-with-icon {
+    position: relative;
+}
+
+.eye-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+}
+
+.password-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.password-input {
+    width: 100%;
+    padding-right: 40px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 20px;
+    top: 35%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.password-wrapper .password-input {
+    padding-right: 75px;
+}

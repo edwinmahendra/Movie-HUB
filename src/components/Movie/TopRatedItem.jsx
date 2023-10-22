@@ -1,11 +1,17 @@
 import Card from 'react-bootstrap/Card';
 import sampleImage from '../../assets/sample_poster_portrait.png';
 import './TopRatedItem.css'
+import { useNavigate } from 'react-router';
 
 const PopularUpcomingItem = () => {
+    const navigate = useNavigate();
+    const handleClick = () => {
+        navigate('/detail');
+    }
+
     return (
         <>
-            <Card className='top-rated-container'>
+            <Card className='top-rated-container' onClick={handleClick} style={{cursor: 'pointer'}}>
                 <Card.Img variant="top" src={sampleImage} alt='Poster' />
 
                 <Card.Body>

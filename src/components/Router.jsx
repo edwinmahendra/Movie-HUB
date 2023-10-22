@@ -4,6 +4,7 @@ import Blank from "../pages/Blank";
 import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
+import { Detail } from "../pages/Detail/Detail";
 import Bookmark from "../pages/Bookmark/Bookmark";
 import Profile from "../pages/Profile/Profile";
 import EditPicture from "../pages/Profile/EditPicture";
@@ -20,6 +21,7 @@ const Router = () => {
                 </Route>
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/detail" element={<Detail />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/edit-profile-pic" element={<EditPicture />} />
             </Routes>

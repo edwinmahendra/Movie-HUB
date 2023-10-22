@@ -1,0 +1,34 @@
+.trailer-card {
+    border-radius: 15px;
+    overflow: hidden; /* This ensures that the iframe and other child elements follow the card's border-radius */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Increased the shadow a bit for a more lifted look */
+    margin: 15px 0;
+    position: relative; /* Added this to position the trailer-title correctly */
+    background-color: #000; /* Provides a background in case the video takes time to load or fails to load */
+    transition: transform 0.3s; /* Smoothens the hover effect */
+}
+
+.trailer-card:hover {
+    transform: translateY(-5px); /* This will lift the card up slightly on hover */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); /* Intensifies the shadow a bit on hover */
+}
+
+.trailer-video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.trailer-title {
+    padding: 10px 15px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.7); /* Increased the opacity a bit for better legibility */
+    color: #fff;
+    position: absolute; /* Makes the title float above the video */
+    bottom: 0; /* Aligns the title to the bottom of the card */
+    left: 0; /* Aligns the title to the left edge of the card */
+    width: 100%; /* Ensures the title stretches across the entire width of the card */
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow at the top of the title for depth */
+}

@@ -5,6 +5,7 @@ import { Row, Col, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ButtonBackHome from "../../components/Profile/ButtonBackHome";
 
 const EditPicture = () => {
   const navigate = useNavigate();
@@ -33,6 +34,7 @@ const EditPicture = () => {
     <div>
       <ToastContainer />
       <div className="header-profile">
+        <ButtonBackHome />
         <ProfilePicture />
       </div>
 

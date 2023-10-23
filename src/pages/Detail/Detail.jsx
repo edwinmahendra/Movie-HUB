@@ -10,8 +10,8 @@ import CastItem from "../../components/Cast/CastItem";
 import TrailerItem from "../../components/Trailer/TrailerItem";
 import RecommendationItem from "../../components/Recommendation/RecommendationItem";
 import SearchBar from "../../components/Movie/SearchBar";
-import bookmark1 from "../../assets/bookmark_1.svg";
-import bookmark2 from "../../assets/bookmark_2.svg";
+import bookmark1 from "../../assets/bookmark.svg";
+import bookmark2 from "../../assets/bookmark-off.svg";
 import ButtonBackHome from "../../components/Profile/ButtonBackHome";
 
 export const Detail = () => {

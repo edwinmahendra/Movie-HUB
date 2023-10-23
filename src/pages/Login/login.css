@@ -1,6 +1,7 @@
 .login {
     display: grid;
     grid-template-columns: 2fr 1fr;
+    /* Adjusted column ratios */
     grid-template-rows: auto;
     align-items: center;
     height: 100vh;
@@ -97,6 +98,7 @@ p,
     color: #6680c0;
 }
 
+/* "Sign in" title */
 .login .text-wrapper-5 {
     color: #ffffff;
     font-family: "Inter-Bold", Helvetica;

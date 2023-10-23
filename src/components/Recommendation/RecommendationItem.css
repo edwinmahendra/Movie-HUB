@@ -2,12 +2,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 542px;
+    width: 400px;
 }
 
 .recommendation-image {
-    height: 327px;
-    width: 542px;
+    height: 200px;
+    width: 400px;
     background-size: cover;
     background-position: center;
     border-radius: 12px;
@@ -17,7 +17,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start; /* Aligns text to the left side */
-    width: 542px; /* Matches the width of the card image */
+    width: 400px; /* Matches the width of the card image */
     padding-top: 10px; /* You can adjust this as per your spacing preference */
 }
 

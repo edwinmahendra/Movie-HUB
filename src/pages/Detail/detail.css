@@ -365,7 +365,7 @@ html {
 }
 
 .recommendation-card {
-  flex: 0 0 542px;
+  flex: 0 0 400px;
   margin-right: 15px;
   border-radius: 10px;
   overflow: hidden;

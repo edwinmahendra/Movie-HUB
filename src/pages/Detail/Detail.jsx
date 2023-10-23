@@ -40,7 +40,7 @@ export const Detail = () => {
             src={isBookmarked ? bookmark1 : bookmark2}
             onClick={toggleBookmark}
           />
-          <p className="game-of-thrones">
+          <p className="header-movie">
             <span className="text-wrapper">Game of Thrones </span>
             <span className="span">(2011)</span>
           </p>

@@ -21,7 +21,7 @@ html {
 }
 
 .detail-movie .div {
-  background-color: #030303;
+
   height: 100%;
   position: relative;
   width: 100%;
@@ -53,7 +53,7 @@ html {
   width: 331px;
 }
 
-.detail-movie .game-of-thrones {
+.detail-movie .header-movie {
   color: #000000;
   font-family: "Inter-Bold", Helvetica;
   font-size: 40px;

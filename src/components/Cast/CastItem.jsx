@@ -2,6 +2,7 @@ import React from 'react';
 import './cast.css';
 import castDummyImage from "../../assets/castdummy.jpg";
 
+
 const CastItem = () => {
   return (
     <div className="cast-card">

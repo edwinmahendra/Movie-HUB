@@ -3,6 +3,7 @@ import "./register.css";
 import logo from "../../assets/logo.svg";
 import eyeOn from "../../assets/eye.svg";
 import eyeOff from "../../assets/eye-off.svg";
+import { useNavigate } from "react-router";
 
 export const Register = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -10,6 +11,11 @@ export const Register = () => {
   
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
+  };
+
+  const navigate = useNavigate();
+  const moveLogin = () => {
+    navigate("/login");
   };
 
   const validatePhoneNumber = () => {
@@ -69,7 +75,7 @@ export const Register = () => {
             </button>
             <div className="text-wrapper-2">
               Already have an Account?{" "}
-              <span className="text-wrapper-3">Sign In</span>
+              <span className="text-wrapper-3" onClick={moveLogin}>Sign In</span>
             </div>
           </div>
         </div>

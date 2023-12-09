@@ -45,7 +45,7 @@ const Sidebar = () => {
     useEffect(() => {
         const curPath = window.location.pathname.split('/')[1];
         const activeItem = sidebarItems.findIndex(item => item.section === curPath);
-        setActiveIndex(curPath.length === 0 ? 0 : activeItem);
+        setActiveIndex(curPath.length === 0 || activeItem == -1 ? 0 : activeItem);
     }, [location]);
     
     return (

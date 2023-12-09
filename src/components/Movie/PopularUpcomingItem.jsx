@@ -1,22 +1,23 @@
 import Card from 'react-bootstrap/Card';
-import sampleImage from '../../assets/sample_poster_portrait.png';
 import './PopularUpcomingItem.css'
 import { useNavigate } from 'react-router';
 
-const PopularUpcomingItem = () => {
+const PopularUpcomingItem = ({idMovie, title, imageUrl, releasedDate}) => {
     const navigate = useNavigate();
     const handleClick = () => {
-        navigate('/detail');
+        navigate(`/detail/${idMovie}`);
     }
+    let formatedDate = new Date(releasedDate);
+    formatedDate = formatedDate.toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric'});
 
     return (
         <>
             <Card className='popular-container' onClick={handleClick}  style={{cursor: 'pointer'}}>
-                <Card.Img variant="top" src={sampleImage} alt='Poster' />
+                <Card.Img variant="top" src={process.env.REACT_APP_BASE_URL_IMG_MOVIE + imageUrl} alt='Poster' />
 
                 <Card.Body>
-                    <Card.Title>One Piece</Card.Title>
-                    <Card.Text> Aug 31, 2023 </Card.Text>
+                    <Card.Title>{title}</Card.Title>
+                    <Card.Text>{formatedDate}</Card.Text>
                 </Card.Body>
             </Card>
         </>

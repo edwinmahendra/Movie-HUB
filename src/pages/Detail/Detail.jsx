@@ -13,12 +13,14 @@ import SearchBar from "../../components/Movie/SearchBar";
 import bookmark1 from "../../assets/bookmark.svg";
 import bookmark2 from "../../assets/bookmark-off.svg";
 import ButtonBackHome from "../../components/Profile/ButtonBackHome";
+import { useParams } from "react-router-dom";
 
 export const Detail = () => {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const toggleBookmark = () => {
     setIsBookmarked((prev) => !prev);
   };
+  const { idMovie } = useParams();
 
   return (
     <div className="detail-movie">

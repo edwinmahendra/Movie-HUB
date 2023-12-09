@@ -1,36 +1,84 @@
 import React, { useState } from "react";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { useNavigate } from "react-router";
 import "./register.css";
 import logo from "../../assets/logo.svg";
 import eyeOn from "../../assets/eye.svg";
 import eyeOff from "../../assets/eye-off.svg";
-import { useNavigate } from "react-router";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const Register = () => {
-  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const navigate = useNavigate();
+  const auth = getAuth();
+  const db = getFirestore();
+
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
 
-  const navigate = useNavigate();
+  const validatePhoneNumber = () => {
+    const phonePattern = /^[0-9]{7,15}$/;
+    return phonePattern.test(phoneNumber);
+  };
+
+  const validateEmail = (email) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+  };
+
+  const handleRegister = async () => {
+    if (!name || !email || !password || !phoneNumber) {
+      toast.error("Please fill in all fields.");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
+    if (!validatePhoneNumber()) {
+      toast.error("Phone number is not valid. Please enter a valid phone number.");
+      return;
+    }
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userId = userCredential.user.uid;
+      
+      await setDoc(doc(db, "Users", userId), {
+        name,
+        email,
+        phoneNumber,
+      });
+
+      toast.success("Registration successful!");
+      navigate("/login");
+    } catch (error) {
+      let errorMessage = "Registration failed. Please try again.";
+      if (error.code === "auth/email-already-in-use") {
+        errorMessage = "This email is already in use.";
+      }
+      toast.error("Failed to register");
+      console.error("Error in user registration:", error);
+    }
+  };
+
   const moveLogin = () => {
     navigate("/login");
   };
 
-  const validatePhoneNumber = () => {
-    const phonePattern = /^[0-9][0-9]{7,15}$/;
-
-    if (phonePattern.test(phoneNumber)) {
-      // Phone number is valid
-    } else {
-      // Phone number is not valid
-      alert("Phone number is not valid. Please enter a valid phone number.");
-    }
-  };
-
   return (
     <div className="register">
+      <ToastContainer />
       <img className="aatbio-com-image" alt="Aatbio com image" src={logo} />
       <div className="register-content">
         <div className="overlap">
@@ -40,12 +88,16 @@ export const Register = () => {
               className="input"
               type="text"
               placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
             <div className="text-wrapper">
               <input
                 className="input"
                 type="email"
                 placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="text-wrapper">
@@ -62,6 +114,8 @@ export const Register = () => {
                 className="password-input"
                 type={passwordVisible ? "text" : "password"}
                 placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <img
                 className="toggle-password"
@@ -70,7 +124,7 @@ export const Register = () => {
                 onClick={togglePasswordVisibility}
               />
             </div>
-            <button className="signup-button" onClick={validatePhoneNumber}>
+            <button className="signup-button" onClick={handleRegister}>
               Sign up
             </button>
             <div className="text-wrapper-2">

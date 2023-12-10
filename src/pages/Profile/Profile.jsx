@@ -20,7 +20,7 @@ const Profile = () => {
     // Make sure the user is authenticated
     if (auth.currentUser) {
       const userRef = doc(db, 'Users', auth.currentUser.uid);
-
+      console.log('Current user:', auth.currentUser);
       // Fetch the document for the current user
       getDoc(userRef).then((docSnapshot) => {
         if (docSnapshot.exists()) {

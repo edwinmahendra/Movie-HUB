@@ -4,6 +4,8 @@ import { FaHome, FaAngleRight, FaBookmark,  } from "react-icons/fa";
 import { LuLogOut } from "react-icons/lu";
 import { IoMdLogOut } from 'react-icons/io';
 import logo from "../../assets/logo.svg";
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import "./sidebar.css";
 import ConfirmLogoutModal from '../Logout/ConfirmLogoutModal';
 
@@ -105,18 +107,42 @@ const Sidebar = () => {
     );
 }
 
-const ProfileSidebar = ({photoUrl, name, email}) => {
+const ProfileSidebar = () => {
+    const auth = getAuth();
     const navigate = useNavigate();
+    const db = getFirestore();
+    const [userInfo, setUserInfo] = useState({ name: '', email: '', photoUrl: '' });
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const userDocRef = doc(db, "Users", user.uid);
+                getDoc(userDocRef).then((docSnap) => {
+                    if (docSnap.exists()) {
+                        setUserInfo({
+                            name: docSnap.data().name || user.displayName || 'No Name',
+                            email: user.email,
+                            photoUrl: docSnap.data().profilePicture || user.photoURL || "https://via.placeholder.com/50x50"
+                        });
+                    }
+                }).catch(error => console.error("Error fetching user data:", error));
+            }
+        });
+
+        // Clean up the listener
+        return () => unsubscribe();
+    }, [auth, db]);
+
     const handleClick = () => {
         navigate("/profile");
     };
 
     return (
         <div className="profile_sidebar">
-            <img className='img_profile' src="https://via.placeholder.com/50x50" style={{cursor: 'pointer'}} onClick={handleClick}/>
+            <img className='img_profile' src={userInfo.photoUrl} style={{ cursor: 'pointer' }} onClick={handleClick} />
             <div className='detail_profile'>
-                <span style={{cursor: 'pointer'}} onClick={handleClick}>Johny Andrean</span>
-                <span>markjhony@gmail.com</span>
+                <span style={{ cursor: 'pointer' }} onClick={handleClick}>{userInfo.name}</span>
+                <span>{userInfo.email}</span>
             </div>
         </div>
     );

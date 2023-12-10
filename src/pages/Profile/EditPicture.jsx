@@ -25,6 +25,8 @@ const EditPicture = () => {
       const userDocRef = doc(db, 'Users', auth.currentUser.uid);
       const userDocSnap = await getDoc(userDocRef);
 
+      console.log('Current user:', auth.currentUser);
+
       if (userDocSnap.exists()) {
         setImageUrl(userDocSnap.data().profilePicture);
       }

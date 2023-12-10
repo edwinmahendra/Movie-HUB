@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaHome, FaAngleRight, FaBookmark,  } from "react-icons/fa";
 import { LuLogOut } from "react-icons/lu";
+import { IoMdLogOut } from 'react-icons/io';
 import logo from "../../assets/logo.svg";
 import "./sidebar.css";
+import ConfirmLogoutModal from '../Logout/ConfirmLogoutModal';
 
 const sidebarItems = [
     {
@@ -18,41 +20,52 @@ const sidebarItems = [
         to: "/bookmark",
         section: "bookmark"
     },
-    {
-        display: "Logout", 
-        icon: <LuLogOut />,
-        to: "/logout",
-        section: "logout"
-    },
+    // {
+    //     display: "Logout", 
+    //     icon: <LuLogOut />,
+    //     action: () => setShowLogoutModal(true),
+    //     section: "logout"
+    // },
 ];
+
+
 
 const Sidebar = () => {
     const [activeIndex, setActiveIndex] = useState(0);
     const [stepHeight, setStepHeight] = useState(0);
+    const [showLogoutModal, setShowLogoutModal] = useState(false); // State for logout modal visibility
     const sidebarRef = useRef();
     const indicatorRef = useRef();
-    const location = useLocation();
+    const navigate = useNavigate();
 
     useEffect(() => {
         setTimeout(() => {
             const sidebarItem = sidebarRef.current.querySelector('.sidebar_menu_item');
-            indicatorRef.current.style.height = `${sidebarItem.clientHeight}px`;
-            setStepHeight(sidebarItem.clientHeight);
+            if (sidebarItem) {
+                indicatorRef.current.style.height = `${sidebarItem.clientHeight}px`;
+                setStepHeight(sidebarItem.clientHeight);
+            }
         }, 50);
     }, []);
 
-    // change active index
     useEffect(() => {
         const curPath = window.location.pathname.split('/')[1];
         const activeItem = sidebarItems.findIndex(item => item.section === curPath);
-        setActiveIndex(curPath.length === 0 || activeItem == -1 ? 0 : activeItem);
-    }, [location]);
-    
+        setActiveIndex(curPath.length === 0 || activeItem === -1 ? 0 : activeItem);
+    }, [navigate]);
+
+    const handleLogoutClick = () => {
+        setShowLogoutModal(true);
+    };
+
+    const handleCloseLogoutModal = () => {
+        setShowLogoutModal(false);
+    };
+
     return (
         <div className='sidebar'>
             <div className="sidebar_logo">
-                <img src={logo} alt="logo"
-                style={{height: '100px', width: '120px'}}></img>
+                <img src={logo} alt="logo" style={{ height: '100px', width: '120px' }} />
             </div>
             <div ref={sidebarRef} className="sidebar_menu">
                 <p className='sidebar_title_menu'>MENU</p>
@@ -77,8 +90,17 @@ const Sidebar = () => {
                         </Link>
                     ))
                 }
+                <div onClick={handleLogoutClick} className={`sidebar_menu_item ${activeIndex === 2 ? 'active' : ''}`}>
+                    <div className="sidebar_menu_item_icon">
+                        <LuLogOut />
+                    </div>
+                    <div className="sidebar_menu_item_text">
+                        Logout
+                    </div>
+                </div>
             </div>
             <ProfileSidebar />
+            <ConfirmLogoutModal show={showLogoutModal} handleClose={handleCloseLogoutModal} />
         </div>
     );
 }

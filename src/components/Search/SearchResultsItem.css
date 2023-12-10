@@ -1,0 +1,43 @@
+.search-poster-img {
+    max-height: fit-content;
+    max-width: fit-content;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.search-item {
+    margin-top: 20px;
+    display: grid;
+    height: fit-content;
+    width: 100%;
+    grid-template-columns: 0.2fr 1fr;
+    column-gap: 10px;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-decoration: none; 
+}
+
+.search-result-item{
+    text-decoration: none; 
+}
+
+.search-item-body {
+    padding: 20px;
+}
+
+.search-item-title {
+    font-weight: bold;
+    font-size: 24px;
+    margin-bottom: 10px; /* Adjust spacing */
+}
+
+.search-item-date {
+    font-size: 18px;
+    color: #767479;
+    margin-bottom: 10px; /* Adjust spacing */
+}
+
+.search-item-description {
+    font-size: 16px;
+    color: #767479;
+}

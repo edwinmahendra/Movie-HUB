@@ -58,6 +58,8 @@ export const Register = () => {
         name,
         email,
         phoneNumber,
+        description: "",
+        profilePicture: "",
       });
 
       toast.success("Registration successful!");

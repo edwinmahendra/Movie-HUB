@@ -34,7 +34,7 @@ export const Login = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       toast.success("Logged in successfully!");
-      navigate("/"); // Navigate to the home page after successful login
+      navigate("/"); 
     } catch (error) {
       toast.error("Failed to log in. Please check your credentials.");
       console.error("Error in user login:", error);

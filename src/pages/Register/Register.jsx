@@ -21,6 +21,46 @@ export const Register = () => {
       // Phone number is not valid
       alert("Phone number is not valid. Please enter a valid phone number.");
     }
+<<<<<<< Updated upstream
+=======
+
+    if (!validateEmail(email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
+    if (!validatePhoneNumber()) {
+      toast.error("Phone number is not valid. Please enter a valid phone number.");
+      return;
+    }
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userId = userCredential.user.uid;
+      
+      await setDoc(doc(db, "Users", userId), {
+        name,
+        email,
+        phoneNumber,
+        description: "",
+        profilePicture: "",
+      });
+
+      toast.success("Registration successful!");
+      navigate("/login");
+    } catch (error) {
+      let errorMessage = "Registration failed. Please try again.";
+      if (error.code === "auth/email-already-in-use") {
+        errorMessage = "This email is already in use.";
+      }
+      toast.error("Failed to register");
+      console.error("Error in user registration:", error);
+    }
+  };
+
+  const moveLogin = () => {
+    navigate("/login");
+>>>>>>> Stashed changes
   };
 
   return (

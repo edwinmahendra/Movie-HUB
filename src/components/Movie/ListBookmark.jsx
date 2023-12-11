@@ -1,50 +1,79 @@
-// listBookmark.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Card from "react-bootstrap/Card";
-import sampleImage from "../../assets/sampleImage.jpg";
-import sampleImage2 from "../../assets/sampleImage2.jpg";
-import sampleImage3 from "../../assets/sampleImage3.jpg";
+import { collection, getDocs, doc, getDoc, updateDoc, getFirestore } from "firebase/firestore";
+
 import bookmarkon from '../../assets/bookmark.svg';
 import bookmarkoff from '../../assets/bookmark-off.svg';
 
 import "./listBookmark.css";
+import { getAuth } from "firebase/auth";
 
-const ListBookmark = ({ sorting }) => {
-  const [bookmarks, setBookmarks] = useState([
-    {
-      title: "Conjuring (2013)",
-      date: "2013-08-31",
-      sinopsis:
-        "Paranormal investigators Ed and Lorraine Warren work to help a family terrorized by a dark presence in their farmhouse. Forced to confront a powerful entity, the Warrens find themselves caught in the most terrifying case of their lives.",
-      dateAdded: "2023-08-29",
-      isBookmarked: true,
-      image: sampleImage,
-    },
-    {
-      title: "Strays (2023)",
-      date: "2023-08-17",
-      sinopsis:
-        "When Reggie is abandoned on the mean city streets by his lowlife owner, Doug, Reggie is certain that his beloved owner would never leave him on purpose.",
-      dateAdded: "2023-08-31",
-      isBookmarked: true,
-      image: sampleImage3,
-    },
-    {
-      title: "Zonjuring 2(2016)",
-      date: "2016-06-26",
-      sinopsis:
-        "Lorraine and Ed Warren travel to north London to help a single mother raising four children alone in a house plagued by malicious spirits.",
-      dateAdded: "2023-08-30",
-      isBookmarked: true,
-      image: sampleImage2,
-    },
+const ListBookmark = ({ sorting, userId }) => {
+  const [bookmarks, setBookmarks] = useState([]);
+  const db = getFirestore();
+  const auth = getAuth(); // Replace with your authentication library
 
-  ]);
+  useEffect(() => {
+    const fetchBookmarks = async () => {
+      try {
+        // Check if the user is signed in
+        const user = auth.currentUser;
+        if (!user) {
+          console.log("No user is currently signed in.");
+          return;
+        }
+    
+        const userId = user.uid;
+        console.log("Current User ID:", userId);
+    
+        // Get the user document
+        const db = getFirestore();
+        const userDocRef = doc(db, 'Users', userId);
+        const userDocSnapshot = await getDoc(userDocRef);
+    
+        if (userDocSnapshot.exists()) {
+          // Access the bookmarks subcollection
+          const bookmarksCollection = await getDocs(collection(db, 'Users', userId, 'Bookmarks'));
+    
+          // Extract data from each bookmark
+          const bookmarksData = bookmarksCollection.docs.map((bookmarkDoc) => {
+            const data = bookmarkDoc.data();
+            console.log("Bookmark Data:", data); // Log the data
+            return data;
+          });
+          setBookmarks(bookmarksData);
+        } else {
+          console.log("User document does not exist.");
+        }
+      } catch (error) {
+        console.error("Error fetching bookmarks:", error);
+      }
+    };
+  
+    fetchBookmarks();
+  }, [db, auth]);
+  
 
-  const toggleBookmark = (index) => {
-    const updatedBookmarks = [...bookmarks];
-    updatedBookmarks[index].isBookmarked = !updatedBookmarks[index].isBookmarked;
-    setBookmarks(updatedBookmarks);
+  const toggleBookmark = async (index) => {
+    const selectedBookmark = bookmarks[index];
+
+    try {
+      // Update the isBookmarked field in the user's bookmark document
+      const bookmarkRef = doc(collection(db, "Users", userId, "Bookmarks"), selectedBookmark.id);
+      
+      await updateDoc(bookmarkRef, {
+        isBookmarked: !selectedBookmark.isBookmarked,
+      });
+
+      // Update local state
+      const updatedBookmarks = [...bookmarks];
+      updatedBookmarks[index].isBookmarked = !updatedBookmarks[index].isBookmarked;
+      setBookmarks(updatedBookmarks);
+
+      console.log("Bookmark Toggled:", updatedBookmarks[index]); // Log the updated bookmark
+    } catch (error) {
+      console.error("Error toggling bookmark:", error);
+    }
   };
 
   const sortBookmarks = (sortingType) => {
@@ -54,10 +83,8 @@ const ListBookmark = ({ sorting }) => {
       sortedBookmarks.sort((a, b) => a.title.localeCompare(b.title));
     } else if (sortingType === "date") {
       sortedBookmarks.sort((a, b) => a.date.localeCompare(b.date));
-    }
-    else if (sortingType === "dateAdded"){
+    } else if (sortingType === "dateAdded") {
       sortedBookmarks.sort((b, a) => a.dateAdded.localeCompare(b.dateAdded));
-
     }
 
     return sortedBookmarks;
@@ -93,4 +120,5 @@ const ListBookmark = ({ sorting }) => {
     </>
   );
 };
+
 export default ListBookmark;

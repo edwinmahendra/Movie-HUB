@@ -9,11 +9,12 @@ import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import "./sidebar.css";
 import ConfirmLogoutModal from '../Logout/ConfirmLogoutModal';
 
+
 const sidebarItems = [
     {
         display: "Home", 
         icon: <FaHome />,
-        to: "/",
+        to: "/", 
         section: ""
     },
     {

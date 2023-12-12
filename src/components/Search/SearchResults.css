@@ -20,6 +20,19 @@
     font-size: 25px;
 }
 
+.no-results-container {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    height: 80vh; 
+    color: white;
+  }
+  
+  .no-results {
+    font-size: 1.5rem; 
+    font-weight: bold; 
+  }
+
 #movie-date {
     font-size: 25px;
     color: #767479;

@@ -8,6 +8,7 @@ import SearchBar from "../../components/Movie/SearchBar";
 import SearchResults from "../../components/Search/SearchResults";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 import PopularUpcomingItemShimmer from "../../components/Movie/PopularUpcomingItemShimmer";
 import NowPlayingItemShimmer from "../../components/Movie/NowPlayingItemShimmer";
 
@@ -21,19 +22,35 @@ export default function Home() {
   const [isSearching, setIsSearching] = useState(false);
   const nowPlayingShimmerItems = [...Array(4).keys()];
   const shimmerItems = [...Array(6).keys()];
+  const location = useLocation();
 
   const config = {
     headers: { Authorization: `Bearer ${process.env.REACT_APP_MOVIE_TOKEN}` },
   };
+  // useEffect(() => {
+  //   if (!isSearching) {
+  //     setLoading(true);
+  //     fetchDataNowPlaying();
+  //     fetchDataPopular();
+  //     fetchDataTopRated();
+  //     fetchDataUpcoming();
+  //   }
+  // }, [isSearching]);
+
   useEffect(() => {
-    if (!isSearching) {
-      setLoading(true);
-      fetchDataNowPlaying();
-      fetchDataPopular();
-      fetchDataTopRated();
-      fetchDataUpcoming();
+    const queryParams = new URLSearchParams(location.search);
+    const searchQuery = queryParams.get('search');
+    if (searchQuery) {
+        handleSearch(searchQuery);
+    } else {
+      setIsSearching(false);
+        setLoading(true);
+        fetchDataNowPlaying();
+        fetchDataPopular();
+        fetchDataTopRated();
+        fetchDataUpcoming();
     }
-  }, [isSearching]);
+}, [location.search]);
 
   const fetchDataNowPlaying = async () => {
     try {

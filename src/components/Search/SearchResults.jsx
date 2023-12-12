@@ -34,8 +34,13 @@ const SearchResult = ({ movies }) => {
     setSortMethod(method);
   };
 
-  if (movies.length === 0) {
-    return <p>No results found</p>;
+  
+if (movies.length === 0) {
+    return (
+      <div className="no-results-container">
+        <p className="no-results">No results found</p>
+      </div>
+    );
   }
 
   return (

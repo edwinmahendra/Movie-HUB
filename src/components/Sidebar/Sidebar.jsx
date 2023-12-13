@@ -112,7 +112,7 @@ const ProfileSidebar = () => {
     const auth = getAuth();
     const navigate = useNavigate();
     const db = getFirestore();
-    const [userInfo, setUserInfo] = useState({ name: '', email: '', photoUrl: '' });
+    const [userInfo, setUserInfo] = useState({ name: '', email: '', photoUrl: '', isLoading: true });
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -123,10 +123,16 @@ const ProfileSidebar = () => {
                         setUserInfo({
                             name: docSnap.data().name || user.displayName || 'No Name',
                             email: user.email,
-                            photoUrl: docSnap.data().profilePicture || user.photoURL || "https://via.placeholder.com/50x50"
+                            photoUrl: docSnap.data().profilePicture || user.photoURL || "https://via.placeholder.com/50x50",
+                            isLoading: false
                         });
                     }
-                }).catch(error => console.error("Error fetching user data:", error));
+                }).catch(error => {
+                    console.error("Error fetching user data:", error);
+                    setUserInfo(prev => ({ ...prev, isLoading: false }));
+                });
+            } else {
+                setUserInfo(prev => ({ ...prev, isLoading: false }));
             }
         });
 
@@ -138,6 +144,18 @@ const ProfileSidebar = () => {
         navigate("/profile");
     };
 
+    if (userInfo.isLoading) {
+        return (
+            <div className="profile_sidebar">
+                <div className='img-placeholder shimmer' style={{ height: '50px', width: '50px', borderRadius: '50%' }}></div>
+                <div className='detail_profile'>
+                    <div className='text-placeholder shimmer' style={{ width: '100px', height: '10px', margin: '5px 0' }}></div>
+                    <div className='text-placeholder shimmer' style={{ width: '150px', height: '10px', margin: '5px 0' }}></div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="profile_sidebar">
             <img className='img_profile' src={userInfo.photoUrl} style={{ cursor: 'pointer' }} onClick={handleClick} />
@@ -148,5 +166,4 @@ const ProfileSidebar = () => {
         </div>
     );
 }
-
 export default Sidebar;

@@ -15,14 +15,64 @@ import bookmark2 from "../../assets/bookmark-off.svg";
 import ButtonBackHome from "../../components/Profile/ButtonBackHome";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { getAuth } from "firebase/auth";
+import { collection, deleteDoc, doc, getDoc, addDoc,updateDoc, getFirestore,setDoc } from "firebase/firestore";
+
+
 
 export const Detail = () => {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isLoading, setIsLoading] = useState(true); 
   const [dataMovies, setDataMovies] = useState();
-  const toggleBookmark = () => {
-    setIsBookmarked((prev) => !prev);
+  const db = getFirestore();
+  const auth = getAuth();
+
+  const toggleBookmark = async () => {
+    const db = getFirestore();
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const userRef = collection(db, "Users", user.uid, "Bookmarks");
+    try {
+      const user = auth.currentUser;
+      if (!user) {
+        console.log("No user is currently signed in.");
+        return;
+      }
+  
+      const userId = user.uid;
+      const movieId = idMovie;
+  
+      const bookmarkRef = doc(db, 'Users', userId, 'Bookmarks', movieId);
+      const bookmarkDocSnapshot = await getDoc(bookmarkRef);
+  
+      if (bookmarkDocSnapshot.exists()) {
+        // If already bookmarked, remove the movie from bookmarks
+        await deleteDoc(bookmarkRef);
+        console.log('Movie removed from bookmarks');
+      } else {
+        // If not bookmarked, add the movie to bookmarks
+        await setDoc(bookmarkRef, {
+          // Populate with your movie data
+          idMovie: movieId,
+          title: dataMovies.original_title,
+          releaseDate: dataMovies.release_date,
+          sinopsis: dataMovies.overview,
+          genre: genres.join(", "),
+          posterPath: process.env.REACT_APP_BASE_URL_IMG_MOVIE + dataMovies.poster_path,
+          dateAdded: new Date().toISOString(),
+        });
+        console.log('Movie added to bookmarks');
+      }
+  
+      // Update local state based on the result
+      setIsBookmarked(!bookmarkDocSnapshot.exists());
+    } catch (error) {
+      console.error("Error toggling bookmark:", error);
+    }
   };
+  
+
+  
   const { idMovie } = useParams();
   const [userScore, setUserScore] = useState();
   const [genres, setGenres] = useState([]);
@@ -40,7 +90,45 @@ export const Detail = () => {
     getVideosUrl();
     getDirectorsCasts();
     getRecommendations();
-  }, [idMovie]);
+    const fetchBookmarks = async () => {
+      try {
+        const db = getFirestore();
+        const user = auth.currentUser;
+        if (!user) {
+          console.log("No user is currently signed in.");
+          return;
+        }
+  
+        const userId = user.uid;
+        const movieId = idMovie;
+  
+        const bookmarkRef = doc(db, 'Users', userId, 'Bookmarks', movieId);
+        const bookmarkDocSnapshot = await getDoc(bookmarkRef);
+        if (bookmarkDocSnapshot.exists()) {
+          setIsBookmarked(true)
+          await deleteDoc(bookmarkRef);
+          console.log('Movie removed from bookmarks');
+        } else {
+          setIsBookmarked(false)
+        }
+  
+        // Check if the movie is bookmarked
+        const initialIsBookmarked = bookmarkDocSnapshot.exists();
+  
+        // Update the local state
+        setIsBookmarked(initialIsBookmarked);
+  
+        // ... rest of your code
+      } catch (error) {
+        console.error("Error checking bookmark:", error);
+      }
+    };
+  
+    // Fetch bookmarks when the component mounts
+    fetchBookmarks();
+  
+    // ... rest of your code
+  }, [idMovie, db, auth]);
 
   const getDetailMovie = async () => {
     try {
@@ -106,6 +194,29 @@ export const Detail = () => {
       console.log(err);
     }
   };
+  // const addBookmarkToFirestore = async () => {
+  //   const db = getFirestore();
+  //   const auth = getAuth();
+  //   const user = auth.currentUser;
+  //   const userRef = collection(db, "Users", user.uid, "Bookmarks");
+
+  //   try {
+  //     // Tambahkan dokument baru ke koleksi bookmarks
+  //     const docRef = await addDoc(userRef, {
+  //       idMovie,
+  //       dateAdded: new Date().toISOString(), // Gunakan format tanggal yang sesuai
+  //       genre: genres.join(", "), // Gunakan informasi genre dari API atau sesuaikan
+  //       title: dataMovies.original_title,
+  //       sinopsis: dataMovies.overview,
+  //       releaseDate: dataMovies.release_date,
+  //       posterPath: process.env.REACT_APP_BASE_URL_IMG_MOVIE + dataMovies.poster_path, // Add poster path
+  //     });
+
+  //     console.log("Bookmark added with ID: ", docRef.id);
+  //   } catch (error) {
+  //     console.error("Error adding bookmark to Firestore:", error);
+  //   }
+  // };
 
   // return shimmer
   if (isLoading) {

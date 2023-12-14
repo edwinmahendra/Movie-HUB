@@ -6,7 +6,7 @@ import eyeOff from "../../assets/eye-off.svg";
 import { useNavigate } from "react-router";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, setPersistence, browserSessionPersistence} from "firebase/auth";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,6 +14,7 @@ export const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const navigate = useNavigate();
   const auth = getAuth();
+  setPersistence(auth, browserSessionPersistence);
 
   const validateEmail = (email) => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

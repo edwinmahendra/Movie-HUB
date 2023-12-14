@@ -12,12 +12,11 @@ const ListBookmark = ({ sorting, userId }) => {
   const [bookmarks, setBookmarks] = useState([]);
   const db = getFirestore();
   const navigate = useNavigate();
-  const auth = getAuth(); // Replace with your authentication library
+  const auth = getAuth(); 
 
   useEffect(() => {
     const fetchBookmarks = async () => {
       try {
-        // Check if the user is signed in
         const user = auth.currentUser;
         if (!user) {
           console.log("No user is currently signed in.");
@@ -33,10 +32,8 @@ const ListBookmark = ({ sorting, userId }) => {
         const userDocSnapshot = await getDoc(userDocRef);
     
         if (userDocSnapshot.exists()) {
-          // Access the bookmarks subcollection
           const bookmarksCollection = await getDocs(collection(db, 'Users', userId, 'Bookmarks'));
     
-          // Extract data from each bookmark
           const bookmarksData = bookmarksCollection.docs.map((bookmarkDoc) => {
             const data = bookmarkDoc.data();
             data.releaseDate = parseDateString(data.releaseDate);
@@ -78,11 +75,9 @@ const ListBookmark = ({ sorting, userId }) => {
       console.log("IDMOVIE: ",bookmarks[index].idMovie)
   
       if (bookmarkDocSnapshot.exists()) {
-        // If already bookmarked, remove the movie from bookmarks
         await deleteDoc(bookmarkRef);
         console.log('Movie removed from bookmarks');
       } else {
-        // If not bookmarked, add the movie to bookmarks
         await setDoc(bookmarkRef, {
           idMovie: movieId,
           title: bookmarks[index].title,
@@ -96,7 +91,6 @@ const ListBookmark = ({ sorting, userId }) => {
         console.log('Movie added to bookmarks');
       }
   
-      // Toggle the local state to update the UI
       const updatedBookmarks = [...bookmarks];
     updatedBookmarks[index].isBookmarked = !updatedBookmarks[index].isBookmarked;
     setBookmarks(updatedBookmarks);

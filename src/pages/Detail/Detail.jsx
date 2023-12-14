@@ -46,13 +46,10 @@ export const Detail = () => {
       const bookmarkDocSnapshot = await getDoc(bookmarkRef);
   
       if (bookmarkDocSnapshot.exists()) {
-        // If already bookmarked, remove the movie from bookmarks
         await deleteDoc(bookmarkRef);
         console.log('Movie removed from bookmarks');
       } else {
-        // If not bookmarked, add the movie to bookmarks
         await setDoc(bookmarkRef, {
-          // Populate with your movie data
           idMovie: movieId,
           title: dataMovies.original_title,
           releaseDate: dataMovies.release_date,
@@ -64,7 +61,6 @@ export const Detail = () => {
         console.log('Movie added to bookmarks');
       }
   
-      // Update local state based on the result
       setIsBookmarked(!bookmarkDocSnapshot.exists());
     } catch (error) {
       console.error("Error toggling bookmark:", error);
@@ -112,22 +108,17 @@ export const Detail = () => {
           setIsBookmarked(false)
         }
   
-        // Check if the movie is bookmarked
         const initialIsBookmarked = bookmarkDocSnapshot.exists();
   
-        // Update the local state
         setIsBookmarked(initialIsBookmarked);
   
-        // ... rest of your code
       } catch (error) {
         console.error("Error checking bookmark:", error);
       }
     };
   
-    // Fetch bookmarks when the component mounts
     fetchBookmarks();
   
-    // ... rest of your code
   }, [idMovie, db, auth]);
 
   const getDetailMovie = async () => {
@@ -193,33 +184,7 @@ export const Detail = () => {
     }catch(err){
       console.log(err);
     }
-  };
-  // const addBookmarkToFirestore = async () => {
-  //   const db = getFirestore();
-  //   const auth = getAuth();
-  //   const user = auth.currentUser;
-  //   const userRef = collection(db, "Users", user.uid, "Bookmarks");
-
-  //   try {
-  //     // Tambahkan dokument baru ke koleksi bookmarks
-  //     const docRef = await addDoc(userRef, {
-  //       idMovie,
-  //       dateAdded: new Date().toISOString(), // Gunakan format tanggal yang sesuai
-  //       genre: genres.join(", "), // Gunakan informasi genre dari API atau sesuaikan
-  //       title: dataMovies.original_title,
-  //       sinopsis: dataMovies.overview,
-  //       releaseDate: dataMovies.release_date,
-  //       posterPath: process.env.REACT_APP_BASE_URL_IMG_MOVIE + dataMovies.poster_path, // Add poster path
-  //     });
-
-  //     console.log("Bookmark added with ID: ", docRef.id);
-  //   } catch (error) {
-  //     console.error("Error adding bookmark to Firestore:", error);
-  //   }
-  // };
-
-  // return shimmer
-  if (isLoading) {
+  }; if (isLoading) {
     return <div>Loading...</div>;
   }
 

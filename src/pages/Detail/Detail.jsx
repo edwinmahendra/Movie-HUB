@@ -13,23 +13,31 @@ import SearchBar from "../../components/Movie/SearchBar";
 import bookmark1 from "../../assets/bookmark.svg";
 import bookmark2 from "../../assets/bookmark-off.svg";
 import ButtonBackHome from "../../components/Profile/ButtonBackHome";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { getAuth } from "firebase/auth";
 import { collection, deleteDoc, doc, getDoc, addDoc,updateDoc, getFirestore,setDoc } from "firebase/firestore";
-
-
+import SearchResults from "../../components/Search/SearchResults";
 
 export const Detail = () => {
+  const { idMovie } = useParams();
+  const [userScore, setUserScore] = useState();
+  const [genres, setGenres] = useState([]);
+  const [videos, setVideos] = useState([]);
+  const [directors, setDirectors] = useState([]);
+  const [casts, setCasts] = useState([]);
+  const [recommendations, setRecommendations] = useState([]);
+  const [searchTerm, setSearchTerm] = useState(""); // State to capture search term
+  const [searchResults, setSearchResults] = useState([]); // State to store search results
+  const [isSearching, setIsSearching] = useState(false);
+  const navigate = useNavigate();
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); 
+  const [isLoading, setIsLoading] = useState(true);
   const [dataMovies, setDataMovies] = useState();
   const db = getFirestore();
   const auth = getAuth();
 
   const toggleBookmark = async () => {
-    const db = getFirestore();
-    const auth = getAuth();
     const user = auth.currentUser;
     const userRef = collection(db, "Users", user.uid, "Bookmarks");
     try {
@@ -66,16 +74,6 @@ export const Detail = () => {
       console.error("Error toggling bookmark:", error);
     }
   };
-  
-
-  
-  const { idMovie } = useParams();
-  const [userScore, setUserScore] = useState();
-  const [genres, setGenres] = useState([]);
-  const [videos, setVideos] = useState([]);
-  const [directors, setDirectors] = useState([]);
-  const [casts, setCasts] = useState([]);
-  const [recommendations, setRecommendations] = useState([]);
 
   const config = {
     headers: { Authorization: `Bearer ${process.env.REACT_APP_MOVIE_TOKEN}` },
@@ -86,9 +84,12 @@ export const Detail = () => {
     getVideosUrl();
     getDirectorsCasts();
     getRecommendations();
-    const fetchBookmarks = async () => {
+    fetchBookmarks();
+  
+  }, [idMovie, db, auth]);
+
+const fetchBookmarks = async () => {
       try {
-        const db = getFirestore();
         const user = auth.currentUser;
         if (!user) {
           console.log("No user is currently signed in.");
@@ -116,10 +117,6 @@ export const Detail = () => {
         console.error("Error checking bookmark:", error);
       }
     };
-  
-    fetchBookmarks();
-  
-  }, [idMovie, db, auth]);
 
   const getDetailMovie = async () => {
     try {
@@ -141,50 +138,65 @@ export const Detail = () => {
   };
 
   const getVideosUrl = async () => {
-    try{
-      const res = await axios.get(
-        `${process.env.REACT_APP_BASE_URL_MOVIE}movie/${idMovie}/videos`,
-        config
-      ).then((res) => {
-        let videos = res.data.results.map((video) => video.key);
-        setVideos(videos);
-      });
-    }catch(err){
+    try {
+      const res = await axios
+        .get(
+          `${process.env.REACT_APP_BASE_URL_MOVIE}movie/${idMovie}/videos`,
+          config
+        )
+        .then((res) => {
+          let videos = res.data.results.map((video) => video.key);
+          setVideos(videos);
+        });
+    } catch (err) {
       console.log(err);
     }
   };
 
   const getDirectorsCasts = async () => {
-    try{
-      const res = await axios.get(
-        `${process.env.REACT_APP_BASE_URL_MOVIE}movie/${idMovie}/credits`,
-        config
-      ).then((res) => {
-        let directors = res.data.crew.filter((crew) => crew.job === "Director");
-        directors = directors.map((director) => director.name);
-        let casts = res.data.cast;
-        setDirectors(directors);
-        setCasts(casts);
-      });
-    }catch(err){
+    try {
+      const res = await axios
+        .get(
+          `${process.env.REACT_APP_BASE_URL_MOVIE}movie/${idMovie}/credits`,
+          config
+        )
+        .then((res) => {
+          let directors = res.data.crew.filter(
+            (crew) => crew.job === "Director"
+          );
+          directors = directors.map((director) => director.name);
+          let casts = res.data.cast;
+          setDirectors(directors);
+          setCasts(casts);
+        });
+    } catch (err) {
       console.log(err);
     }
   };
 
+  const handleSearch = (query) => {
+    if (query.trim()) {
+      navigate(`/home?search=${encodeURIComponent(query)}`); // Redirect to home with query using navigate
+    }
+  };
+
   const getRecommendations = async () => {
-    try{
-      const res = await axios.get(
-        `${process.env.REACT_APP_BASE_URL_MOVIE}movie/${idMovie}/similar`,
-        config
-      ).then((res) => {
-        let recommendations = res.data.results;
-        setRecommendations(recommendations);
-        console.log('recommendations', recommendations);
-      });
-    }catch(err){
+    try {
+      const res = await axios
+        .get(
+          `${process.env.REACT_APP_BASE_URL_MOVIE}movie/${idMovie}/similar`,
+          config
+        )
+        .then((res) => {
+          let recommendations = res.data.results;
+          setRecommendations(recommendations);
+          console.log("recommendations", recommendations);
+        });
+    } catch (err) {
       console.log(err);
     }
-  }; if (isLoading) {
+
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
@@ -196,7 +208,7 @@ export const Detail = () => {
               <ButtonBackHome />
             </div>
             <div className="group">
-              <SearchBar />
+            <SearchBar onSearch={handleSearch} />
             </div>
           </div>
           <div className="overlap-group">
@@ -278,4 +290,6 @@ export const Detail = () => {
         </div>
       </div>
   )
+
+  
 };

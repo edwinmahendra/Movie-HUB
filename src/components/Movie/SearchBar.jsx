@@ -1,17 +1,42 @@
-import search from "../../assets/search.svg";
+import React, { useState } from 'react';
+import searchIcon from "../../assets/search.svg";
 import "./searchBar.css";
 
-const SearchBar = () => {
+const SearchBar = ({ onSearch }) => {
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
+
+    const handleSearchSubmit = () => {
+        onSearch(searchTerm);
+    };
+
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            handleSearchSubmit();
+        }
+    };
+
     return (
         <div className="overlap-group2">
-              <input
+            <input
                 type="text"
                 placeholder="Search"
                 className="search-input"
-              />
-              <img src={search} alt="Search" className="search-instance" />
+                value={searchTerm}
+                onChange={handleSearchChange}
+                onKeyPress={handleKeyPress}
+            />
+            <img 
+                src={searchIcon} 
+                alt="Search" 
+                className="search-instance" 
+                onClick={handleSearchSubmit}
+            />
         </div>
-    )
+    );
 };
 
 export default SearchBar;

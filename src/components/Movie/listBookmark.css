@@ -3,8 +3,15 @@
     max-width: fit-content;
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
-}
+    z-index:0 ;
 
+}
+.bookmark{
+    margin-left: 100%;
+    float: inline-end;
+    align-items: last baseline;
+    pointer-events: auto;
+}
 .image{
     margin-top: 20px;
     display: grid ;
@@ -14,31 +21,33 @@
     grid-template-columns: 0.2fr 1fr;
     column-gap: 10px;
     left: 0px;
+    right: 80px;
     border-radius: 20px;
 }
 
 #sinopsis{
     font-size: 25px;
+    z-index:0 ;
+
 }
 
 #movie-date{
-    margin-top: 0%;
+    margin-top: 2%;
     font-size: 25px;
     color: #767479;
-
 }
 
 #title{
     margin-bottom: 0%;
     display: grid ;
     font-weight: bold;
+    width: 95%;
     font-size: 30px;
     grid-template-columns: 5fr 0fr;
+    
 }
 
-.bookmark{
-    float: inline-end;
-}
+
 
 #date-added{
     font-size: 20px;

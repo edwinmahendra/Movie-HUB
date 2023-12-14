@@ -15,15 +15,11 @@ import bookmark2 from "../../assets/bookmark-off.svg";
 import ButtonBackHome from "../../components/Profile/ButtonBackHome";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { getAuth } from "firebase/auth";
+import { collection, deleteDoc, doc, getDoc, addDoc,updateDoc, getFirestore,setDoc } from "firebase/firestore";
 import SearchResults from "../../components/Search/SearchResults";
 
 export const Detail = () => {
-  const [isBookmarked, setIsBookmarked] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [dataMovies, setDataMovies] = useState();
-  const toggleBookmark = () => {
-    setIsBookmarked((prev) => !prev);
-  };
   const { idMovie } = useParams();
   const [userScore, setUserScore] = useState();
   const [genres, setGenres] = useState([]);
@@ -35,18 +31,92 @@ export const Detail = () => {
   const [searchResults, setSearchResults] = useState([]); // State to store search results
   const [isSearching, setIsSearching] = useState(false);
   const navigate = useNavigate();
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [dataMovies, setDataMovies] = useState();
+  const db = getFirestore();
+  const auth = getAuth();
+
+  const toggleBookmark = async () => {
+    const user = auth.currentUser;
+    const userRef = collection(db, "Users", user.uid, "Bookmarks");
+    try {
+      const user = auth.currentUser;
+      if (!user) {
+        console.log("No user is currently signed in.");
+        return;
+      }
+  
+      const userId = user.uid;
+      const movieId = idMovie;
+  
+      const bookmarkRef = doc(db, 'Users', userId, 'Bookmarks', movieId);
+      const bookmarkDocSnapshot = await getDoc(bookmarkRef);
+  
+      if (bookmarkDocSnapshot.exists()) {
+        await deleteDoc(bookmarkRef);
+        console.log('Movie removed from bookmarks');
+      } else {
+        await setDoc(bookmarkRef, {
+          idMovie: movieId,
+          title: dataMovies.original_title,
+          releaseDate: dataMovies.release_date,
+          sinopsis: dataMovies.overview,
+          genre: genres.join(", "),
+          posterPath: process.env.REACT_APP_BASE_URL_IMG_MOVIE + dataMovies.poster_path,
+          dateAdded: new Date().toISOString(),
+        });
+        console.log('Movie added to bookmarks');
+      }
+  
+      setIsBookmarked(!bookmarkDocSnapshot.exists());
+    } catch (error) {
+      console.error("Error toggling bookmark:", error);
+    }
+  };
 
   const config = {
     headers: { Authorization: `Bearer ${process.env.REACT_APP_MOVIE_TOKEN}` },
   };
   useEffect(() => {
-      setIsLoading(true);
-      getDetailMovie();
-      getVideosUrl();
-      getDirectorsCasts();
-      getRecommendations();
-    
-  }, [idMovie]);
+    setIsLoading(true);
+    getDetailMovie();
+    getVideosUrl();
+    getDirectorsCasts();
+    getRecommendations();
+    fetchBookmarks();
+  
+  }, [idMovie, db, auth]);
+
+const fetchBookmarks = async () => {
+      try {
+        const user = auth.currentUser;
+        if (!user) {
+          console.log("No user is currently signed in.");
+          return;
+        }
+  
+        const userId = user.uid;
+        const movieId = idMovie;
+  
+        const bookmarkRef = doc(db, 'Users', userId, 'Bookmarks', movieId);
+        const bookmarkDocSnapshot = await getDoc(bookmarkRef);
+        if (bookmarkDocSnapshot.exists()) {
+          setIsBookmarked(true)
+          await deleteDoc(bookmarkRef);
+          console.log('Movie removed from bookmarks');
+        } else {
+          setIsBookmarked(false)
+        }
+  
+        const initialIsBookmarked = bookmarkDocSnapshot.exists();
+  
+        setIsBookmarked(initialIsBookmarked);
+  
+      } catch (error) {
+        console.error("Error checking bookmark:", error);
+      }
+    };
 
   const getDetailMovie = async () => {
     try {
@@ -125,7 +195,6 @@ export const Detail = () => {
     } catch (err) {
       console.log(err);
     }
-  };
 
   if (isLoading) {
     return <div>Loading...</div>;

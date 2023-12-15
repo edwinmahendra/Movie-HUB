@@ -13,7 +13,7 @@ import SearchBar from "../../components/Movie/SearchBar";
 import bookmark1 from "../../assets/bookmark.svg";
 import bookmark2 from "../../assets/bookmark-off.svg";
 import ButtonBackHome from "../../components/Profile/ButtonBackHome";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { getAuth } from "firebase/auth";
 import { collection, deleteDoc, doc, getDoc, addDoc,updateDoc, getFirestore,setDoc } from "firebase/firestore";
@@ -73,6 +73,7 @@ export const Detail = () => {
   const [directors, setDirectors] = useState([]);
   const [casts, setCasts] = useState([]);
   const [recommendations, setRecommendations] = useState([]);
+  const navigate = useNavigate();
 
   const config = {
     headers: { Authorization: `Bearer ${process.env.REACT_APP_MOVIE_TOKEN}` },
@@ -180,6 +181,12 @@ export const Detail = () => {
     }
   };
 
+  const handleSearch = (query) => {
+    if (query.trim()) {
+      navigate(`/home?search=${encodeURIComponent(query)}`);
+    }
+  };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -192,7 +199,7 @@ export const Detail = () => {
               <ButtonBackHome />
             </div>
             <div className="group">
-              <SearchBar />
+            <SearchBar onSearch={handleSearch} />
             </div>
           </div>
           <div className="overlap-group">

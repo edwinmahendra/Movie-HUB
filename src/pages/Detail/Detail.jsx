@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, CSSProperties } from "react";
 import "./detail.css";
 import logo from "../../assets/logo.svg";
 import instagram from "../../assets/instagram.svg";
@@ -15,6 +15,7 @@ import bookmark2 from "../../assets/bookmark-off.svg";
 import ButtonBackHome from "../../components/Profile/ButtonBackHome";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { PropagateLoader } from "react-spinners";
 
 export const Detail = () => {
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -100,7 +101,6 @@ export const Detail = () => {
       ).then((res) => {
         let recommendations = res.data.results;
         setRecommendations(recommendations);
-        console.log('recommendations', recommendations);
       });
     }catch(err){
       console.log(err);
@@ -109,7 +109,14 @@ export const Detail = () => {
 
   // return shimmer
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div
+        style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <PropagateLoader
+          size={30}
+          color="#6680C0" />
+      </div>
+    );
   }
 
   return (

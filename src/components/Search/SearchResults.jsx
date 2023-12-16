@@ -1,50 +1,104 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import SearchResultItem from "./SearchResultsItem";
 import { DropdownButton, Dropdown } from "react-bootstrap";
 import "./SearchResults.css";
+import MoviePagination from "../Pagination/MoviePagination";
+import axios from "axios";
+import { useSearchParams, } from "react-router-dom";
+import SearchBar from "../Movie/SearchBar";
+import { useLocation } from "react-router-dom";
 
-const SearchResult = ({ movies }) => {
+const SearchResult = () => {
+  const [query, setQuery] = useSearchParams();
   const [sortedMovies, setSortedMovies] = useState([]);
   const [sortMethod, setSortMethod] = useState("title-asc");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(50);
+  const [searchResults, setSearchResults] = useState([]);
   const baseUrl = "https://image.tmdb.org/t/p/w500";
 
-  useEffect(() => {
-    function sortMovies(method) {
-      const sorted = [...movies].sort((a, b) => {
-        switch (method) {
-          case "title-asc":
-            return a.title.localeCompare(b.title);
-          case "title-desc":
-            return b.title.localeCompare(a.title);
-          case "date-asc":
-            return new Date(a.release_date) - new Date(b.release_date);
-          case "date-desc":
-            return new Date(b.release_date) - new Date(a.release_date);
-          default:
-            return 0;
-        }
-      });
-      setSortedMovies(sorted);
-    }
+  const config = {
+    headers: { Authorization: `Bearer ${process.env.REACT_APP_MOVIE_TOKEN}` },
+  };
 
+  useEffect(() => {
+    searchMovies();
+  }, [query, currentPage]);
+
+  useEffect(() => {
     sortMovies(sortMethod);
-  }, [movies, sortMethod]);
+  }, [searchResults, sortMethod]);
+
+  const searchMovies = async () => {
+    try {
+      const queryParam = query.get("q");
+      const res = await axios.get(
+        `${
+          process.env.REACT_APP_BASE_URL_MOVIE
+        }search/movie?query=${encodeURIComponent(
+          queryParam
+        )}&language=en-US&page=${currentPage}&include_adult=false`,
+        config
+      );
+      setSearchResults(res.data.results);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const sortMovies = (method) => {
+    const sorted = [...searchResults].sort((a, b) => {
+      switch (method) {
+        case "title-asc":
+          return a.title.localeCompare(b.title);
+        case "title-desc":
+          return b.title.localeCompare(a.title);
+        case "date-asc":
+          return new Date(a.release_date) - new Date(b.release_date);
+        case "date-desc":
+          return new Date(b.release_date) - new Date(a.release_date);
+        default:
+          return 0;
+      }
+    });
+    setSortedMovies(sorted);
+  };
 
   const handleSorting = (method) => {
     setSortMethod(method);
   };
 
-  
-if (movies.length === 0) {
+  const handlePageChange = useCallback((pageNumber) => {
+    setCurrentPage(pageNumber);
+    searchMovies();
+  }, []);
+
+  const handleSearch = (query) => {
+    setQuery(
+      new URLSearchParams({
+        q: query,
+      })
+    );
+  };
+
+  if (searchResults.length === 0) {
     return (
-      <div className="no-results-container">
-        <p className="no-results">No results found</p>
+      <div>
+        <div className="container-search-home">
+          <SearchBar onSearch={handleSearch} />
+        </div>
+        <div className="no-results-container">
+          <p className="no-results">No results found</p>
+        </div>
       </div>
     );
   }
 
   return (
     <div>
+      <div className="container-search-home">
+        <SearchBar onSearch={handleSearch} />
+      </div>
       <div className="sorting-dropdown">
         <DropdownButton id="sorting-dropdown" title="Sort by">
           <Dropdown.Item onClick={() => handleSorting("title-asc")}>
@@ -72,6 +126,14 @@ if (movies.length === 0) {
             description={movie.overview}
           />
         ))}
+      </div>
+
+      <div style={{ marginTop: "2rem" }}>
+        <MoviePagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          setCurrentPage={handlePageChange}
+        />
       </div>
     </div>
   );

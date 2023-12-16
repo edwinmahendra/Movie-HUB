@@ -10,6 +10,7 @@ import Profile from "../pages/Profile/Profile";
 import EditPicture from "../pages/Profile/EditPicture";
 import MovieList from "../pages/MovieList/MovieList";
 import ConfirmLogoutModal from "./Logout/ConfirmLogoutModal";
+import SearchResult from "./Search/SearchResults";
 
 const Router = () => {
     return (
@@ -18,6 +19,7 @@ const Router = () => {
                 <Route path="/" element={<AppLayout />}>
                     <Route index element={<Home />} />
                     <Route path="/home" element={<Home />} />
+                    <Route path="/movies/search" element={<SearchResult />} />
                     <Route path="/movies/:movieType" element={<MovieList />} />
                     <Route path="/bookmark" element={<Bookmark />} />
                 </Route>

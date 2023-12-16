@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import "./SearchResultsItem.css";
+import placeholderPoster from "../../assets/placeholder_poster_portrait.png";
 
 const SearchResultItem = ({
   idMovie,
@@ -21,6 +22,10 @@ const SearchResultItem = ({
           variant="top"
           src={imageUrl}
           alt="Poster"
+          onError={({ currentTarget }) => {
+            currentTarget.onerror = null; 
+            currentTarget.src=placeholderPoster;
+          }}
         />
         <Card.Body className="search-item-body">
           <Card.Title className="search-item-title">{title}</Card.Title>

@@ -6,7 +6,7 @@ import MoviePagination from "../Pagination/MoviePagination";
 import axios from "axios";
 import { useSearchParams, } from "react-router-dom";
 import SearchBar from "../Movie/SearchBar";
-import { useLocation } from "react-router-dom";
+import { PropagateLoader } from "react-spinners"
 
 const SearchResult = () => {
   const [query, setQuery] = useSearchParams();
@@ -15,6 +15,7 @@ const SearchResult = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(50);
   const [searchResults, setSearchResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const baseUrl = "https://image.tmdb.org/t/p/w500";
 
   const config = {
@@ -22,6 +23,7 @@ const SearchResult = () => {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     searchMovies();
   }, [query, currentPage]);
 
@@ -41,6 +43,8 @@ const SearchResult = () => {
         config
       );
       setSearchResults(res.data.results);
+      setTotalPages(res.data.total_pages > 50 ? 50 : res.data.total_pages);
+      setIsLoading(false);
     } catch (err) {
       console.log(err);
     }
@@ -81,8 +85,17 @@ const SearchResult = () => {
     );
   };
 
-  if (searchResults.length === 0) {
+  if (isLoading) {
     return (
+      <div
+        style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <PropagateLoader
+          size={30}
+          color="#6680C0" />
+      </div>
+    );
+  }else if(!isLoading && searchResults.length === 0){
+        return (
       <div>
         <div className="container-search-home">
           <SearchBar onSearch={handleSearch} />

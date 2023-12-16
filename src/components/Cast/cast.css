@@ -33,12 +33,12 @@
     font-size: 20px;
     font-weight: 700;
     color: #000000;
-    margin-bottom: 2px; /* Reduced this margin to bring the names closer together */
+    margin-bottom: 2px; 
 }
   
 .character-name {
     font-family: "Inter-Regular", Helvetica;
     font-size: 18px;
     color: #000000;
-    margin-top: 2px; /* Added this margin for consistency */
+    margin-top: 2px; 
 }

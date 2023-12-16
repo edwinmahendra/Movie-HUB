@@ -29,3 +29,22 @@
 #editPassword{
     margin-bottom: 0 !important;
 }
+
+.reset-password-btn {
+    background-color: red; /* Red background */
+    color: white;         /* White text */
+    border: none;         /* No border */
+    padding: 7px 15px;   /* Padding inside the button */
+    border-radius: 5px;   /* Rounded corners */
+    cursor: pointer;      /* Pointer cursor on hover */
+    outline: none;
+    margin-top: 32px;
+            /* Remove outline */
+    transition: background-color 0.3s ease; /* Transition for hover effect */
+  }
+
+  .reset-password-btn:hover {
+    background-color: red; /* Keep red background on hover */
+    color: white;          /* Keep white text on hover */
+  }
+  

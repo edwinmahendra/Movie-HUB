@@ -6,7 +6,7 @@ import eyeOff from "../../assets/eye-off.svg";
 import { useNavigate } from "react-router";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, setPersistence, browserSessionPersistence} from "firebase/auth";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,6 +14,7 @@ export const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const navigate = useNavigate();
   const auth = getAuth();
+  setPersistence(auth, browserSessionPersistence);
 
   const validateEmail = (email) => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -34,7 +35,7 @@ export const Login = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       toast.success("Logged in successfully!");
-      navigate("/"); // Navigate to the home page after successful login
+      navigate("/");
     } catch (error) {
       toast.error("Failed to log in. Please check your credentials.");
       console.error("Error in user login:", error);
@@ -78,13 +79,18 @@ export const Login = () => {
                 src={passwordVisible ? eyeOn : eyeOff}
                 alt="toggle visibility"
                 onClick={togglePasswordVisibility}
+                style={{ width: "30px" }}
               />
             </div>
-            
-            <button className="signup-button" onClick={clickLogin}>Sign in</button>
+
+            <button className="signup-button" onClick={clickLogin}>
+              Sign in
+            </button>
             <div className="text-wrapper-2">
               New to MovieHub?{" "}
-              <span className="text-wrapper-3" onClick={clickRegister}>Sign Up now.</span>
+              <span className="text-wrapper-3" onClick={clickRegister}>
+                Sign Up now.
+              </span>
             </div>
           </div>
         </div>

@@ -83,3 +83,65 @@
     font-size: 0.7rem;
     color: #767479;
 }
+
+@keyframes shimmer {
+    0% {
+      background-position: -20rem 0;
+    }
+    100% {
+      background-position: 20rem 0;
+    }
+  }
+  
+  .shimmer-loading {
+    animation: shimmer 1.5s infinite linear;
+    background: linear-gradient(
+      to right,
+      #eeeeee 8%,
+      #dddddd 18%,
+      #eeeeee 33%
+    );
+    background-size: 20rem 100%;
+  }
+  
+  .profile-sidebar-loading {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+  
+  .profile-image-loading,
+  .profile-detail-loading {
+    border-radius: 50%;
+    background-color: #767479;
+  }
+  
+  .profile-image-loading {
+    width: 35px;
+    height: 35px;
+    margin-right: 12px;
+  }
+  
+  .profile-detail-loading {
+    flex-grow: 1;
+    height: 10px;
+    margin-bottom: 5px;
+  }
+  
+  /* Add the shimmer effect to the loading placeholders */
+  .profile-image-loading.shimmer-loading,
+  .profile-detail-loading.shimmer-loading {
+    background-repeat: no-repeat;
+    background-image: linear-gradient(
+      to right,
+      #eeeeee 0%,
+      #dddddd 50%,
+      #eeeeee 100%
+    );
+    background-size: 200% 100%;
+  }
+  

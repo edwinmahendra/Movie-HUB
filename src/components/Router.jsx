@@ -9,6 +9,7 @@ import Bookmark from "../pages/Bookmark/Bookmark";
 import Profile from "../pages/Profile/Profile";
 import EditPicture from "../pages/Profile/EditPicture";
 import MovieList from "../pages/MovieList/MovieList";
+import ConfirmLogoutModal from "./Logout/ConfirmLogoutModal";
 
 const Router = () => {
     return (
@@ -19,7 +20,6 @@ const Router = () => {
                     <Route path="/home" element={<Home />} />
                     <Route path="/movies/:movieType" element={<MovieList />} />
                     <Route path="/bookmark" element={<Bookmark />} />
-                    <Route path="/logout" element={<Blank />} />
                 </Route>
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />

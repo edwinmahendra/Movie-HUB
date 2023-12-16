@@ -1,91 +1,147 @@
-// listBookmark.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Card from "react-bootstrap/Card";
-import sampleImage from "../../assets/sampleImage.jpg";
-import sampleImage2 from "../../assets/sampleImage2.jpg";
-import sampleImage3 from "../../assets/sampleImage3.jpg";
+import { collection, getDocs, doc, getDoc, setDoc,deleteDoc,updateDoc, getFirestore } from "firebase/firestore";
+import { useNavigate } from 'react-router';
 import bookmarkon from '../../assets/bookmark.svg';
 import bookmarkoff from '../../assets/bookmark-off.svg';
-
 import "./listBookmark.css";
+import { getAuth } from "firebase/auth";
 
-const ListBookmark = ({ sorting }) => {
-  const [bookmarks, setBookmarks] = useState([
-    {
-      title: "Conjuring (2013)",
-      date: "2013-08-31",
-      sinopsis:
-        "Paranormal investigators Ed and Lorraine Warren work to help a family terrorized by a dark presence in their farmhouse. Forced to confront a powerful entity, the Warrens find themselves caught in the most terrifying case of their lives.",
-      dateAdded: "2023-08-29",
-      isBookmarked: true,
-      image: sampleImage,
-    },
-    {
-      title: "Strays (2023)",
-      date: "2023-08-17",
-      sinopsis:
-        "When Reggie is abandoned on the mean city streets by his lowlife owner, Doug, Reggie is certain that his beloved owner would never leave him on purpose.",
-      dateAdded: "2023-08-31",
-      isBookmarked: true,
-      image: sampleImage3,
-    },
-    {
-      title: "Zonjuring 2(2016)",
-      date: "2016-06-26",
-      sinopsis:
-        "Lorraine and Ed Warren travel to north London to help a single mother raising four children alone in a house plagued by malicious spirits.",
-      dateAdded: "2023-08-30",
-      isBookmarked: true,
-      image: sampleImage2,
-    },
+const ListBookmark = ({ sorting, userId }) => {
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [bookmarks, setBookmarks] = useState([]);
+  const db = getFirestore();
+  const navigate = useNavigate();
+  const auth = getAuth(); 
 
-  ]);
+  useEffect(() => {
+    const fetchBookmarks = async () => {
+      try {
+        const user = auth.currentUser;
+        if (!user) {
+          console.log("No user is currently signed in.");
+          return;
+        }
+    
+        const userId = user.uid;
+        console.log("Current User ID:", userId);
+    
+        // Get the user document
+        const db = getFirestore();
+        const userDocRef = doc(db, 'Users', userId);
+        const userDocSnapshot = await getDoc(userDocRef);
+    
+        if (userDocSnapshot.exists()) {
+          const bookmarksCollection = await getDocs(collection(db, 'Users', userId, 'Bookmarks'));
+    
+          const bookmarksData = bookmarksCollection.docs.map((bookmarkDoc) => {
+            const data = bookmarkDoc.data();
+            data.releaseDate = parseDateString(data.releaseDate);
+            data.dateAdded = parseDateString(data.dateAdded);
+            // console.log("Bookmark Data:", data); // Log the data
+            return data;
+          });
+          setBookmarks(bookmarksData);
+        } else {
+          console.log("User document does not exist.");
+        }
+      } catch (error) {
+        console.error("Error fetching bookmarks:", error);
+      }
+    };
+  
+    fetchBookmarks();
+  }, [db, auth]);
 
-  const toggleBookmark = (index) => {
-    const updatedBookmarks = [...bookmarks];
+
+  
+  const parseDateString = (dateString) => {
+    return new Date(dateString);
+  };
+  const toggleBookmark = async (index) => {
+    const user = auth.currentUser;
+    if (!user) {
+      console.log("No user is currently signed in.");
+      return;
+    }
+  
+    const userId = user.uid;
+    const movieId = bookmarks[index].idMovie;
+  
+    try {
+      const bookmarkRef = doc(db, 'Users', userId, 'Bookmarks', movieId);
+      const bookmarkDocSnapshot = await getDoc(bookmarkRef);
+      console.log(bookmarkDocSnapshot)
+      console.log("IDMOVIE: ",bookmarks[index].idMovie)
+  
+      if (bookmarkDocSnapshot.exists()) {
+        await deleteDoc(bookmarkRef);
+        console.log('Movie removed from bookmarks');
+      } else {
+        await setDoc(bookmarkRef, {
+          idMovie: movieId,
+          title: bookmarks[index].title,
+          releaseDate: bookmarks[index].releaseDate.toISOString(),
+          sinopsis: bookmarks[index].sinopsis,
+          genre: bookmarks[index].genre,
+          posterPath: bookmarks[index].posterPath,
+          dateAdded: new Date().toISOString()
+          // ...
+        });
+        console.log('Movie added to bookmarks');
+      }
+  
+      const updatedBookmarks = [...bookmarks];
     updatedBookmarks[index].isBookmarked = !updatedBookmarks[index].isBookmarked;
     setBookmarks(updatedBookmarks);
+    } catch (error) {
+      console.error("Error toggling bookmark:", error);
+    }
   };
-
+  
   const sortBookmarks = (sortingType) => {
     const sortedBookmarks = [...bookmarks];
-
+  
     if (sortingType === "alphabet") {
       sortedBookmarks.sort((a, b) => a.title.localeCompare(b.title));
     } else if (sortingType === "date") {
-      sortedBookmarks.sort((a, b) => a.date.localeCompare(b.date));
+      sortedBookmarks.sort((a, b) => a.releaseDate - b.releaseDate);
+    } else if (sortingType === "dateAdded") {
+      sortedBookmarks.sort((a, b) => parseDateString(b.dateAdded) - parseDateString(a.dateAdded));
     }
-    else if (sortingType === "dateAdded"){
-      sortedBookmarks.sort((b, a) => a.dateAdded.localeCompare(b.dateAdded));
-
-    }
-
+  
     return sortedBookmarks;
   };
+  const handleClick = (idMovie) => {
+    navigate(`/detail/${idMovie}`);
+}
 
   const sortedBookmarks = sortBookmarks(sorting || "dateAdded");
 
   return (
     <>
       {sortedBookmarks.map((bookmark, index) => (
-        <Card className="image" key={index}>
-          <Card.Img className="posterImg" variant="top" src={bookmark.image} alt="Poster" />
-          <Card.Body id="body">
-            <Card.Title id="title">
-              {bookmark.title}
-              <img
-                className="bookmark"
-                src={bookmark.isBookmarked ? bookmarkon : bookmarkoff}
-                onClick={() => toggleBookmark(index)}
-              />
+        <Card className="image">
+        <Card.Img className="posterImg" variant="top" src={bookmark.posterPath} alt="Poster"  onClick={() => handleClick(bookmark.idMovie)}/>
+        <Card.Body id="body">
+          <Card.Title id="title">
+            <span  onClick={() => handleClick(bookmark.idMovie)}>
+              {bookmark.title }
+            </span>
+            <img
+              className="bookmark"
+              src={bookmark.isBookmarked ? bookmarkoff : bookmarkon}
+              onClick={() => toggleBookmark(index)}
+            />
             </Card.Title>
 
-            <Card.Text id="movie-date">
-              {new Date(bookmark.date).toLocaleDateString("en-US", { month: "long", day: "2-digit", year: "numeric" })}
+            <Card.Text id="movie-date"  onClick={() => handleClick(bookmark.idMovie)}>
+              {bookmark.releaseDate.toLocaleDateString("en-US", { month: "long", day: "2-digit", year: "numeric" })}
             </Card.Text>
-            <Card.Text id="sinopsis">{bookmark.sinopsis}</Card.Text>
-            <Card.Text id="date-added">
-              <b>Date Added:</b> {new Date(bookmark.dateAdded).toLocaleDateString("en-US", { month: "long", day: "2-digit", year: "numeric" })}
+            <Card.Text id="genre" onClick={() => handleClick(bookmark.idMovie)}>{bookmark.genre}</Card.Text>
+            <Card.Text id="sinopsis"  onClick={() => handleClick(bookmark.idMovie)}>{bookmark.sinopsis}</Card.Text>
+            <Card.Text id="date-added"  onClick={() => handleClick(bookmark.idMovie)}>
+              <b>Date Added:</b> {bookmark.dateAdded.toLocaleDateString("en-US", { month: "long", day: "2-digit", year: "numeric" })}
             </Card.Text>
           </Card.Body>
         </Card>
@@ -93,4 +149,5 @@ const ListBookmark = ({ sorting }) => {
     </>
   );
 };
+
 export default ListBookmark;

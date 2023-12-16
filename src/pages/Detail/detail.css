@@ -63,7 +63,7 @@ html {
   line-height: normal;
   position: absolute;
   top: 163px;
-  width: 100%;
+  width: fit-content;
 }
 
 .detail-movie .text-wrapper {

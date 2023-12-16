@@ -252,20 +252,13 @@ html {
   display: flex;
   flex-wrap: nowrap;
   justify-content: flex-start;
+  gap: 8px;
   margin-top: 20px;
-  overflow-x: auto;
-  overflow-y: hidden;
   width: 100%;
   padding-bottom: 20px;
-  scrollbar-width: thin;
-  scrollbar-color: #888 #444;
   margin-left: 102px;
   padding-right: 20px;
   box-sizing: content-box;
-}
-
-.container-cast::-webkit-scrollbar {
-  height: 8px;
 }
 
 .cast-card {
@@ -387,15 +380,36 @@ html {
 
 .container-recommendation {
   display: flex;
-  overflow-x: auto;
-  white-space: nowrap;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  gap: 15px;
+  margin-top: 20px;
   width: 100%;
-  scrollbar-width: thin;
-  padding-left: 108px;
+  padding-bottom: 20px;
+  margin-left: 102px;
+  padding-right: 20px;
+  box-sizing: content-box;
 }
 
-.container-recommendation::-webkit-scrollbar {
-  height: 8px;
+.container-recommendation,
+.container-cast {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.container-recommendation::-webkit-scrollbar-track,
+.container-cast::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.container-recommendation::-webkit-scrollbar-thumb,
+.container-cast::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+.container-recommendation::-webkit-scrollbar,
+.container-cast::-webkit-scrollbar {
+  height: 6px;
 }
 
 .footer-box {

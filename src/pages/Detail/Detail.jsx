@@ -29,6 +29,7 @@ import {
   getFirestore,
   setDoc,
 } from "firebase/firestore";
+import placeholderPoster from "../../assets/placeholder_poster_portrait.png";
 
 export const Detail = () => {
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -233,6 +234,10 @@ export const Detail = () => {
             src={
               process.env.REACT_APP_BASE_URL_IMG_MOVIE + dataMovies.poster_path
             }
+            onError={({ currentTarget }) => {
+              currentTarget.onerror = null; 
+              currentTarget.src=placeholderPoster;
+            }}
           />
           <img
             className="bookmark-icon"

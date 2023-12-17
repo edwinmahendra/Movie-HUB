@@ -61,7 +61,7 @@ export default function Home() {
         `${process.env.REACT_APP_BASE_URL_MOVIE}movie/popular?language=en-US&page=1&region`,
         config
       );
-      setPopularMovies(res.data.results.slice(0, 6));
+      setPopularMovies(res.data.results.slice(4, 10));
     } catch (err) {
       console.log(err);
     }

@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import SearchResultItem from "./SearchResultsItem";
-import { DropdownButton, Dropdown } from "react-bootstrap";
+import { DropdownButton, Dropdown, Button } from "react-bootstrap";
 import "./SearchResults.css";
 import MoviePagination from "../Pagination/MoviePagination";
 import axios from "axios";
 import { useSearchParams, } from "react-router-dom";
 import SearchBar from "../Movie/SearchBar";
 import { PropagateLoader } from "react-spinners"
+import FilterMovie from "../Movie/FilterMovie";
 
 const SearchResult = () => {
   const [query, setQuery] = useSearchParams();
@@ -16,6 +17,9 @@ const SearchResult = () => {
   const [totalPages, setTotalPages] = useState(50);
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showFilter, setShowFilter] = useState(false);
+  const [appliedGenres, setAppliedGenres] = useState([]);
+  const [filteredMovies, setFilteredMovies] = useState([]); 
   const baseUrl = "https://image.tmdb.org/t/p/w500";
 
   const config = {
@@ -30,6 +34,10 @@ const SearchResult = () => {
   useEffect(() => {
     sortMovies(sortMethod);
   }, [searchResults, sortMethod]);
+
+  useEffect(() => {
+    filterMovies();
+  }, [appliedGenres]);
 
   const searchMovies = async () => {
     try {
@@ -66,6 +74,17 @@ const SearchResult = () => {
       }
     });
     setSortedMovies(sorted);
+    setTotalPages(Math.floor(sorted.length / 20) + 1);
+  };
+
+  const filterMovies = () => {
+    const filtered = [...searchResults].filter((movie) => {
+      return appliedGenres.every((genre) => {
+        return movie.genre_ids.includes(genre);
+      });
+    });
+    setSortedMovies(filtered);
+    setTotalPages(Math.floor(filtered.length / 20) + 1);
   };
 
   const handleSorting = (method) => {
@@ -83,6 +102,15 @@ const SearchResult = () => {
         q: query,
       })
     );
+  };
+
+  const showFilterModal = (state) => {
+    setShowFilter(state);
+  };
+
+  const handleApply = (selectedGenres) => {
+    setAppliedGenres(selectedGenres);
+    showFilterModal(false);
   };
 
   if (isLoading) {
@@ -112,7 +140,7 @@ const SearchResult = () => {
       <div className="container-search-home">
         <SearchBar onSearch={handleSearch} />
       </div>
-      <div className="sorting-dropdown">
+      <div className="filter-sort">
         <DropdownButton id="sorting-dropdown" title="Sort by">
           <Dropdown.Item onClick={() => handleSorting("title-asc")}>
             Alphabetically A-Z
@@ -127,6 +155,7 @@ const SearchResult = () => {
             Date Newest-First
           </Dropdown.Item>
         </DropdownButton>
+        <Button id="filter" onClick={() => showFilterModal(true)}>Filter</Button>
       </div>
       <div className="search-results-container">
         {sortedMovies.map((movie) => (
@@ -148,6 +177,8 @@ const SearchResult = () => {
           setCurrentPage={handlePageChange}
         />
       </div>
+
+      <FilterMovie show={showFilter} hide={() => showFilterModal(false)} handleApplyGenres={handleApply} />
     </div>
   );
 };

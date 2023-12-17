@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Form, Container, Row, Col, Button } from "react-bootstrap";
-import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { getAuth, sendPasswordResetEmail, signOut } from "firebase/auth";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import "./EditProfile.css";
 import { Modal } from "react-bootstrap";
+import { PropagateLoader } from "react-spinners";
 import InputPassword from "./InputPassword.jsx";
 
 const EditProfile = ({ onFormDataChange, onPasswordReset }) => {
   const auth = getAuth();
   const db = getFirestore();
   const [showResetDialog, setShowResetDialog] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
   const handleShowResetDialog = () => setShowResetDialog(true);
   const handleCloseResetDialog = () => setShowResetDialog(false);
 
@@ -49,21 +50,45 @@ const EditProfile = ({ onFormDataChange, onPasswordReset }) => {
   };
 
   const handleResetPassword = () => {
-    handleCloseResetDialog(); // Close the dialog first
+    handleCloseResetDialog(); 
+    setIsLoading(true); 
     sendPasswordResetEmail(auth, formData.email)
       .then(() => {
         console.log("Password reset email sent.");
+        signOut(auth).then(() => {
+          setIsLoading(false);
+          window.location.href = "/login";
+        }).catch((error) => {
+          console.error("Error during sign out: ", error);
+          setIsLoading(false); 
+        });
         if (onPasswordReset) {
-          onPasswordReset(true, null); // Invoke the callback with success status
+          onPasswordReset(true, null);
         }
       })
       .catch((error) => {
         console.error("Error sending password reset email: ", error);
+        setIsLoading(false); 
         if (onPasswordReset) {
-          onPasswordReset(false, error); // Invoke the callback with error status
+          onPasswordReset(false, error);
         }
       });
   };
+
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <PropagateLoader size={30} color="#6680C0" />
+      </div>
+    );
+  }
 
   return (
     <Container>
@@ -131,7 +156,7 @@ const EditProfile = ({ onFormDataChange, onPasswordReset }) => {
         </Modal.Header>
         <Modal.Body>
           Are you sure you want to reset your password? An email will be sent
-          with instructions.
+          with instructions. And from now you will be logged off automatically.
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseResetDialog}>

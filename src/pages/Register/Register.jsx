@@ -63,10 +63,18 @@ export const Register = () => {
       return;
     }
 
+    if (!validateEmail(email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
+    if (!validatePhoneNumber()) {
+      toast.error("Phone number is not valid. Please enter a valid phone number.");
+      return;
+    }
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const userId = userCredential.user.uid;
-      
       const docRef = doc(db, "Users", userId);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
@@ -85,6 +93,7 @@ export const Register = () => {
       toast.success("Registration successful!");
       navigate("/login");
     } catch (error) {
+      let errorMessage = "Registration failed. Please try again.";
       if (error.code === "auth/email-already-in-use") {
         toast.error("Email has already been taken");
       } else {

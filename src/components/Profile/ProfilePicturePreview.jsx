@@ -1,4 +1,7 @@
 import React from 'react';
+import { FaPencilAlt } from "react-icons/fa";
+import { IconContext } from "react-icons";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePicturePreview = ({ imageUrl, imageFile }) => {
   const previewUrl = imageFile ? URL.createObjectURL(imageFile) : imageUrl;

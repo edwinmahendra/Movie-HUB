@@ -1,14 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FaHome, FaAngleRight, FaBookmark,  } from "react-icons/fa";
-import { LuLogOut } from "react-icons/lu";
-import { IoMdLogOut } from 'react-icons/io';
+import { Link, useNavigate } from 'react-router-dom';
+import { FaHome, FaBookmark, FaSignInAlt } from "react-icons/fa"; // Imported FaSignInAlt for login icon
 import logo from "../../assets/logo.svg";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import "./sidebar.css";
 import ConfirmLogoutModal from '../Logout/ConfirmLogoutModal';
-
+import { LuLogOut } from "react-icons/lu";
+import { LuLogIn } from "react-icons/lu";
 
 const sidebarItems = [
     {
@@ -23,23 +22,24 @@ const sidebarItems = [
         to: "/bookmark",
         section: "bookmark"
     },
-    // {
-    //     display: "Logout", 
-    //     icon: <LuLogOut />,
-    //     action: () => setShowLogoutModal(true),
-    //     section: "logout"
-    // },
 ];
-
-
 
 const Sidebar = () => {
     const [activeIndex, setActiveIndex] = useState(0);
     const [stepHeight, setStepHeight] = useState(0);
-    const [showLogoutModal, setShowLogoutModal] = useState(false); // State for logout modal visibility
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
+    const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
     const sidebarRef = useRef();
     const indicatorRef = useRef();
     const navigate = useNavigate();
+    const auth = getAuth();
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            setIsUserLoggedIn(!!user);
+        });
+        return () => unsubscribe();
+    }, [auth]);
 
     useEffect(() => {
         setTimeout(() => {
@@ -57,13 +57,7 @@ const Sidebar = () => {
         setActiveIndex(curPath.length === 0 || activeItem === -1 ? 0 : activeItem);
     }, [navigate]);
 
-    const handleLogoutClick = () => {
-        setShowLogoutModal(true);
-    };
-
-    const handleCloseLogoutModal = () => {
-        setShowLogoutModal(false);
-    };
+    const handleLogoutClick = () => setShowLogoutModal(true);
 
     return (
         <div className='sidebar'>
@@ -72,77 +66,59 @@ const Sidebar = () => {
             </div>
             <div ref={sidebarRef} className="sidebar_menu">
                 <p className='sidebar_title_menu'>MENU</p>
-                <div
-                    ref={indicatorRef}
-                    className="sidebar_menu_indicator"
-                    style={{
-                        transform: `translateX(-50%) translateY(${activeIndex * stepHeight}px)`
-                    }}
-                ></div>
-                {
-                    sidebarItems.map((item, index) => (
-                        <Link to={item.to} key={index}>
-                            <div className={`sidebar_menu_item ${activeIndex === index ? 'active' : ''}`}>
-                                <div className="sidebar_menu_item_icon">
-                                    {item.icon}
-                                </div>
-                                <div className="sidebar_menu_item_text">
-                                    {item.display}
-                                </div>
-                            </div>
-                        </Link>
-                    ))
-                }
-                <div onClick={handleLogoutClick} className={`sidebar_menu_item ${activeIndex === 2 ? 'active' : ''}`}>
-                    <div className="sidebar_menu_item_icon">
+                <div ref={indicatorRef} className="sidebar_menu_indicator" style={{ transform: `translateX(-50%) translateY(${activeIndex * stepHeight}px)` }}></div>
+                {sidebarItems.map((item, index) => (
+                    <Link to={item.to} key={index}>
+                        <div className={`sidebar_menu_item ${activeIndex === index ? 'active' : ''}`}>
+                            <div className="sidebar_menu_item_icon">{item.icon}</div>
+                            <div className="sidebar_menu_item_text">{item.display}</div>
+                        </div>
+                    </Link>
+                ))}
+                {isUserLoggedIn && (
+                    <div onClick={handleLogoutClick} className={`sidebar_menu_item ${activeIndex === 2 ? 'active' : ''}`}>
+                        <div className="sidebar_menu_item_icon">
                         <LuLogOut />
                     </div>
-                    <div className="sidebar_menu_item_text">
-                        Logout
+                        <div className="sidebar_menu_item_text">Logout</div>
                     </div>
-                </div>
+                )}
             </div>
-            <ProfileSidebar />
-            <ConfirmLogoutModal show={showLogoutModal} handleClose={handleCloseLogoutModal} />
+            {isUserLoggedIn ? <ProfileSidebar /> : <LoginLink />}
+            <ConfirmLogoutModal show={showLogoutModal} handleClose={() => setShowLogoutModal(false)} />
         </div>
     );
-}
+};
 
 const ProfileSidebar = () => {
     const auth = getAuth();
-    const navigate = useNavigate();
     const db = getFirestore();
     const [userInfo, setUserInfo] = useState({ name: '', email: '', photoUrl: '', isLoading: true });
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                const userDocRef = doc(db, "Users", user.uid);
-                getDoc(userDocRef).then((docSnap) => {
-                    if (docSnap.exists()) {
-                        setUserInfo({
-                            name: docSnap.data().name || user.displayName || 'No Name',
-                            email: user.email,
-                            photoUrl: docSnap.data().profilePicture || user.photoURL || "https://via.placeholder.com/50x50",
-                            isLoading: false
-                        });
-                    }
-                }).catch(error => {
-                    console.error("Error fetching user data:", error);
-                    setUserInfo(prev => ({ ...prev, isLoading: false }));
-                });
-            } else {
+        const user = auth.currentUser;
+        if (user) {
+            const userDocRef = doc(db, "Users", user.uid);
+            getDoc(userDocRef).then((docSnap) => {
+                if (docSnap.exists()) {
+                    setUserInfo({
+                        name: docSnap.data().name || user.displayName || 'No Name',
+                        email: user.email,
+                        photoUrl: docSnap.data().profilePicture || user.photoURL || "https://via.placeholder.com/50x50",
+                        isLoading: false
+                    });
+                }
+            }).catch(error => {
+                console.error("Error fetching user data:", error);
                 setUserInfo(prev => ({ ...prev, isLoading: false }));
-            }
-        });
-
-        // Clean up the listener
-        return () => unsubscribe();
+            });
+        } else {
+            setUserInfo(prev => ({ ...prev, isLoading: false }));
+        }
     }, [auth, db]);
 
-    const handleClick = () => {
-        navigate("/profile");
-    };
+    const navigate = useNavigate();
+    const handleClick = () => navigate("/profile");
 
     if (userInfo.isLoading) {
         return (
@@ -157,13 +133,20 @@ const ProfileSidebar = () => {
     }
 
     return (
-        <div className="profile_sidebar">
-            <img className='img_profile' src={userInfo.photoUrl} style={{ cursor: 'pointer' }} onClick={handleClick} />
+        <div className="profile_sidebar" onClick={handleClick}>
+            <img className='img_profile' src={userInfo.photoUrl} alt="Profile" />
             <div className='detail_profile'>
-                <span style={{ cursor: 'pointer' }} onClick={handleClick}>{userInfo.name}</span>
+                <span>{userInfo.name}</span>
                 <span>{userInfo.email}</span>
             </div>
         </div>
     );
-}
+};
+
+const LoginLink = () => (
+    <Link to="/login" className="sidebar_menu_item sidebar_login_link">
+        <div className="sidebar_menu_item_icon sidebar_login_icon"><LuLogIn /></div>
+        <div className="sidebar_menu_item_text">Login</div>
+    </Link>
+);
 export default Sidebar;

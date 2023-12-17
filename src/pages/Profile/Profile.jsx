@@ -8,11 +8,13 @@ import "react-toastify/dist/ReactToastify.css";
 import ButtonBackHome from "../../components/Profile/ButtonBackHome";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, doc, updateDoc, getDoc } from "firebase/firestore";
+import { PropagateLoader } from "react-spinners";
 
 const Profile = () => {
   const navigate = useNavigate();
   const auth = getAuth();
   const db = getFirestore();
+  const [isLoading, setIsLoading] = useState(true);
   const [profileData, setProfileData] = useState({});
   const [profileImageUrl, setProfileImageUrl] = useState("");
   const [showResetDialog, setShowResetDialog] = useState(false);
@@ -30,11 +32,14 @@ const Profile = () => {
           } else {
             console.log("No such document!");
           }
+          setIsLoading(false);
         })
         .catch((error) => {
           console.error("Error fetching profile picture:", error);
+          setIsLoading(false);
         });
     }
+    setIsLoading(true);
   }, [auth, db]);
 
   const handleFormDataChange = (newData) => {
@@ -72,6 +77,21 @@ const Profile = () => {
       position: toast.POSITION.TOP_RIGHT,
     });
   };
+
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <PropagateLoader size={30} color="#6680C0" />
+      </div>
+    );
+  }
 
   return (
     <div>

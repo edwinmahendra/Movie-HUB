@@ -10,7 +10,7 @@ const ConfirmLogoutModal = ({ show, handleClose }) => {
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
-        navigate('/login');
+        // navigate('/login');
         handleClose();
       })
       .catch((error) => {

@@ -7,11 +7,13 @@ import { useNavigate } from "react-router";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getAuth, signInWithEmailAndPassword, setPersistence, browserSessionPersistence} from "firebase/auth";
+import { Spinner } from "react-bootstrap";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); 
   const navigate = useNavigate();
   const auth = getAuth();
   setPersistence(auth, browserSessionPersistence);
@@ -22,23 +24,30 @@ export const Login = () => {
   };
 
   const clickLogin = async () => {
-    if (!email || !password) {
-      toast.error("Please fill in all fields.");
-      return;
-    }
-
-    if (!validateEmail(email)) {
-      toast.error("Please enter a valid email address.");
-      return;
-    }
-
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      toast.success("Logged in successfully!");
-      navigate("/");
-    } catch (error) {
-      toast.error("Failed to log in. Please check your credentials.");
+    setIsLoading(true);
+    try{
+      if (!email || !password) {
+        toast.error("Please fill in all fields.");
+        return;
+      }
+  
+      if (!validateEmail(email)) {
+        toast.error("Please enter a valid email address.");
+        return;
+      }
+  
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        toast.success("Logged in successfully!");
+        navigate("/");
+      } catch (error) {
+        toast.error("Failed to log in. Please check your credentials.");
+        console.error("Error in user login:", error);
+      }
+    }catch(error){
       console.error("Error in user login:", error);
+    }finally{
+      setIsLoading(false);
     }
   };
 
@@ -84,7 +93,12 @@ export const Login = () => {
             </div>
 
             <button className="signup-button" onClick={clickLogin}>
-              Sign in
+              {isLoading ? (
+                <Spinner animation="border" role="status">
+                </Spinner>
+              ) : (
+                <span>Sign in</span>
+              )}
             </button>
             <div className="text-wrapper-2">
               New to MovieHub?{" "}

@@ -115,11 +115,6 @@ const EditProfile = ({ onFormDataChange, onPasswordReset }) => {
             className="edit-input-styling"
           />
         </Col>
-        <Col>
-          <InputPassword />
-        </Col>
-      </Row>
-      <Row className="mt-4">
         <Col xs={12} md={3} className="mt-3 mt-md-0">
           {" "}
           <Button

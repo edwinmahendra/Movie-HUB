@@ -1,6 +1,7 @@
 import Card from 'react-bootstrap/Card';
 import './TopRatedItem.css'
 import { useNavigate } from 'react-router';
+import placeholderPoster from "../../assets/placeholder_poster_portrait.png";
 
 const TopRatedItem = ({idMovie, title, imageUrl, releasedDate, score}) => {
     const navigate = useNavigate();
@@ -15,7 +16,11 @@ const TopRatedItem = ({idMovie, title, imageUrl, releasedDate, score}) => {
     return (
         <>
             <Card className='top-rated-container' onClick={handleClick} style={{cursor: 'pointer'}}>
-                <Card.Img variant="top" src={process.env.REACT_APP_BASE_URL_IMG_MOVIE + imageUrl} alt='Poster' />
+                <Card.Img variant="top" src={process.env.REACT_APP_BASE_URL_IMG_MOVIE + imageUrl} alt='Poster'
+                          onError={({ currentTarget }) => {
+                            currentTarget.onerror = null; 
+                            currentTarget.src=placeholderPoster;
+                          }} />
 
                 <Card.Body>
                     <Card.Title>{title}</Card.Title>

@@ -2,6 +2,7 @@ import Card from 'react-bootstrap/Card';
 import sampleImage from '../../assets/sample_poster_land.jpg';
 import './NowPlayingItem.css'
 import { useNavigate } from 'react-router';
+import placeholderPoster from "../../assets/placeholder_poster_portrait.png";
 
 const NowPlayingItem = ({idMovie, title, imageUrl, releasedDate}) => {
     const navigate = useNavigate();
@@ -14,7 +15,11 @@ const NowPlayingItem = ({idMovie, title, imageUrl, releasedDate}) => {
     return (
         <>
             <Card className='now-playing-container' onClick={handleClick} style={{cursor: 'pointer'}}>
-                <Card.Img variant="top" src={process.env.REACT_APP_BASE_URL_IMG_MOVIE + imageUrl} alt='Poster' />
+                <Card.Img variant="top" src={process.env.REACT_APP_BASE_URL_IMG_MOVIE + imageUrl} alt='Poster'
+                          onError={({ currentTarget }) => {
+                            currentTarget.onerror = null; 
+                            currentTarget.src=placeholderPoster;
+                          }} />
 
                 <Card.Body>
                     <Card.Title>{title}</Card.Title>

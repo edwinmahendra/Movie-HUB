@@ -1,6 +1,7 @@
 import Card from 'react-bootstrap/Card';
 import './PopularUpcomingItem.css'
 import { useNavigate } from 'react-router';
+import placeholderPoster from "../../assets/placeholder_poster_portrait.png";
 
 const PopularUpcomingItem = ({idMovie, title, imageUrl, releasedDate}) => {
     const navigate = useNavigate();
@@ -13,7 +14,11 @@ const PopularUpcomingItem = ({idMovie, title, imageUrl, releasedDate}) => {
     return (
         <>
             <Card className='popular-container' onClick={handleClick}  style={{cursor: 'pointer'}}>
-                <Card.Img variant="top" src={process.env.REACT_APP_BASE_URL_IMG_MOVIE + imageUrl} alt='Poster' />
+                <Card.Img variant="top" src={process.env.REACT_APP_BASE_URL_IMG_MOVIE + imageUrl} alt='Poster'
+                          onError={({ currentTarget }) => {
+                            currentTarget.onerror = null; 
+                            currentTarget.src=placeholderPoster;
+                          }} />
 
                 <Card.Body>
                     <Card.Title>{title}</Card.Title>

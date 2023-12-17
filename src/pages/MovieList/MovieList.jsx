@@ -54,7 +54,7 @@ const MovieList = () => {
           {movieType.replace("_", " ")}
         </p>
       </div>
-      <div className="container-popular">
+      <div className="container-search">
         {loading
           ? shimmerItems.map((_, index) => (
               <PopularUpcomingItemShimmer key={index} />

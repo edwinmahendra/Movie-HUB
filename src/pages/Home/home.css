@@ -8,6 +8,14 @@
   height: 100%;
 }
 
+.container-search{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0.6rem;
+  height: 100%;
+}
+
 /* .search-input .btn-primary:hover,.btn-primary:focus,.btn-primary:active, 
 .btn-primary:active:focus:not(:disabled):not(.disabled),
 .btn:focus, .btn:active, .btn:hover {

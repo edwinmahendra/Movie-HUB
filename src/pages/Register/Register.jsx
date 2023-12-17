@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
 import {
   getFirestore,
   doc,
@@ -29,9 +33,7 @@ export const Register = () => {
   const auth = getAuth();
   const db = getFirestore();
 
-  useEffect(() => {
-    
-  }, [isLoading]);
+  useEffect(() => {}, [isLoading]);
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -49,45 +51,45 @@ export const Register = () => {
 
   const handleRegister = async () => {
     setIsLoading(true);
-    try{
+    try {
       if (!name || !email || !password || !phoneNumber) {
         toast.error("Please fill in all fields.");
         return;
       }
-  
+
       if (!validateEmail(email)) {
         toast.error("Please enter a valid email address.");
         return;
       }
-  
+
       if (password.length < 4 || password.length > 15) {
         toast.error("Password at least 4-15 characters");
         return;
       }
-  
+
       if (!validatePhoneNumber()) {
         toast.error(
           "Phone number is not valid. Please enter a valid phone number."
         );
         return;
       }
-  
+
       const usersRef = collection(db, "Users");
       const q = query(usersRef, where("name", "==", name));
       const querySnapshot = await getDocs(q);
-  
+
       if (!querySnapshot.empty) {
         toast.error("Username has already been taken");
         setIsLoading(false);
         return;
       }
-  
+
       if (!validateEmail(email)) {
         toast.error("Please enter a valid email address.");
         setIsLoading(false);
         return;
       }
-  
+
       if (!validatePhoneNumber()) {
         setIsLoading(false);
         toast.error(
@@ -108,7 +110,7 @@ export const Register = () => {
           toast.error("Email has already been taken");
           return;
         }
-  
+
         await setDoc(doc(db, "Users", userId), {
           name,
           email,
@@ -116,9 +118,18 @@ export const Register = () => {
           description: "",
           profilePicture: "",
         });
-  
-        toast.success("Registration successful!");
-        navigate("/login");
+
+        const currAuth = getAuth();
+        signOut(currAuth)
+          .then(() => {
+            console.log("Logout successful");
+            toast.success("Registration successful!");
+            navigate("/login");
+          })
+          .catch((error) => {
+            console.error("Logout failed:", error);
+          });
+
       } catch (error) {
         let errorMessage = "Registration failed. Please try again.";
         if (error.code === "auth/email-already-in-use") {
@@ -128,9 +139,9 @@ export const Register = () => {
         }
         console.error("Error in user registration:", error);
       }
-    }catch(error){
+    } catch (error) {
       console.log(error);
-    }finally{
+    } finally {
       setIsLoading(false);
     }
   };
@@ -189,8 +200,7 @@ export const Register = () => {
             </div>
             <button className="signup-button" onClick={handleRegister}>
               {isLoading ? (
-                <Spinner animation="border" role="status">
-                </Spinner>
+                <Spinner animation="border" role="status"></Spinner>
               ) : (
                 <span>Sign up</span>
               )}

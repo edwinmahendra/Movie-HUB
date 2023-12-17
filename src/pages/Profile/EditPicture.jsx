@@ -1,5 +1,6 @@
 import "./Profile.css";
 import EditProfilePicture from "../../components/Profile/EditProfilePicture";
+import ProfilePicture from "../../components/Profile/ProfilePicture";
 import { Row, Col, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";

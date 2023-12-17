@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc, query, where, collection } from "firebase/firestore";
 import { useNavigate } from "react-router";
 import "./register.css";
 import logo from "../../assets/logo.svg";
@@ -45,14 +45,34 @@ export const Register = () => {
       return;
     }
 
+    if (password.length < 4 || password.length > 15) {
+      toast.error("Password at least 4-15 characters");
+      return;
+    }
+
     if (!validatePhoneNumber()) {
       toast.error("Phone number is not valid. Please enter a valid phone number.");
+      return;
+    }
+
+    const usersRef = collection(db, "Users");
+    const q = query(usersRef, where("name", "==", name));
+    const querySnapshot = await getDoc(q);
+    if (!querySnapshot.empty) {
+      toast.error("Username has already been taken");
       return;
     }
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const userId = userCredential.user.uid;
+      
+      const docRef = doc(db, "Users", userId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        toast.error("Email has already been taken");
+        return;
+      }
       
       await setDoc(doc(db, "Users", userId), {
         name,
@@ -65,11 +85,11 @@ export const Register = () => {
       toast.success("Registration successful!");
       navigate("/login");
     } catch (error) {
-      let errorMessage = "Registration failed. Please try again.";
       if (error.code === "auth/email-already-in-use") {
-        errorMessage = "This email is already in use.";
+        toast.error("Email has already been taken");
+      } else {
+        toast.error("Failed to register. Please try again.");
       }
-      toast.error("Failed to register");
       console.error("Error in user registration:", error);
     }
   };

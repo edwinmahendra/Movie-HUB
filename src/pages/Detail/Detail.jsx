@@ -107,8 +107,6 @@ export const Detail = () => {
         const bookmarkDocSnapshot = await getDoc(bookmarkRef);
         if (bookmarkDocSnapshot.exists()) {
           setIsBookmarked(true);
-          await deleteDoc(bookmarkRef);
-          console.log("Movie removed from bookmarks");
         } else {
           setIsBookmarked(false);
         }

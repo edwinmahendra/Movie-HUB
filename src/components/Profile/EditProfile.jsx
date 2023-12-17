@@ -129,6 +129,7 @@ const EditProfile = ({ onFormDataChange, onPasswordReset }) => {
             Reset Password
           </Button>
         </Col>
+        <Row>
       </Row>
       <Modal show={showResetDialog} onHide={handleCloseResetDialog}>
         <Modal.Header closeButton>

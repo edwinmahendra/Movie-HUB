@@ -2,13 +2,14 @@ import React from 'react';
 import './cast.css';
 import castDummyImage from "../../assets/castdummy.jpg";
 
-const CastItem = () => {
+
+const CastItem = ({actorName, character, profilePict}) => {
   return (
     <div className="cast-card">
-      <div className="card-image" style={{ backgroundImage: `url(${castDummyImage})` }}></div>
+      <div className="card-image" style={{ backgroundImage: `url(${process.env.REACT_APP_BASE_URL_IMG_MOVIE + profilePict})` }}></div>
       <div className="card-details">
-        <p className="actor-name">Peter Dinklage</p>
-        <p className="character-name">Tyrion</p>
+        <p className="actor-name">{actorName}</p>
+        <p className="character-name">{character}</p>
       </div>
     </div>
   );

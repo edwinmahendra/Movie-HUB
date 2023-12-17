@@ -1,14 +1,50 @@
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-
 import React, { useState } from "react";
 import "./login.css";
 import logo from "../../assets/logo.svg";
 import eyeOn from "../../assets/eye.svg";
 import eyeOff from "../../assets/eye-off.svg";
+import { useNavigate } from "react-router";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { getAuth, signInWithEmailAndPassword, setPersistence, browserSessionPersistence} from "firebase/auth";
 
 export const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const navigate = useNavigate();
+  const auth = getAuth();
+  setPersistence(auth, browserSessionPersistence);
+
+  const validateEmail = (email) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+  };
+
+  const clickLogin = async () => {
+    if (!email || !password) {
+      toast.error("Please fill in all fields.");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      toast.success("Logged in successfully!");
+      navigate("/");
+    } catch (error) {
+      toast.error("Failed to log in. Please check your credentials.");
+      console.error("Error in user login:", error);
+    }
+  };
+
+  const clickRegister = () => {
+    navigate("/register");
+  };
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -16,31 +52,45 @@ export const Login = () => {
 
   return (
     <div className="login">
+      <ToastContainer />
       <img className="aatbio-com-image" alt="Aatbio com image" src={logo} />
       <div className="login-content">
         <div className="overlap">
           <div className="text-wrapper-5">Sign in</div>
           <div className="overlap-group">
-            <input className="input" type="email" placeholder="Email" />
+            <input
+              className="input"
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
             <div className="password-wrapper">
               <input
                 className="input password-input"
                 type={passwordVisible ? "text" : "password"}
                 placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <img
                 className="toggle-password"
                 src={passwordVisible ? eyeOn : eyeOff}
                 alt="toggle visibility"
                 onClick={togglePasswordVisibility}
+                style={{ width: "30px" }}
               />
             </div>
-            
-            <button className="signup-button">Sign in</button>
+
+            <button className="signup-button" onClick={clickLogin}>
+              Sign in
+            </button>
             <div className="text-wrapper-2">
               New to MovieHub?{" "}
-              <span className="text-wrapper-3">Sign Up now.</span>
+              <span className="text-wrapper-3" onClick={clickRegister}>
+                Sign Up now.
+              </span>
             </div>
           </div>
         </div>
@@ -49,28 +99,4 @@ export const Login = () => {
   );
 };
 
-function Login() {
-    return (
-      <Form>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control type="email" placeholder="Enter email" />
-          <Form.Text className="text-muted">
-            We'll never share your email with anyone else.
-          </Form.Text>
-        </Form.Group>
-  
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control type="password" placeholder="Password" />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicCheckbox">
-          <Form.Check type="checkbox" label="Check me out" />
-        </Form.Group>
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
-      </Form>
-    );
-  }
 export default Login;

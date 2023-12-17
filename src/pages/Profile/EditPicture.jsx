@@ -2,10 +2,6 @@ import "./Profile.css";
 import EditProfilePicture from "../../components/Profile/EditProfilePicture";
 import { Row, Col, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-<<<<<<< Updated upstream
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-=======
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ButtonBackHome from "../../components/Profile/ButtonBackHome";
@@ -14,7 +10,6 @@ import { getAuth } from 'firebase/auth';
 import ProfilePicturePreview from '../../components/Profile/ProfilePicturePreview';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { getFirestore, doc, updateDoc, getDoc } from 'firebase/firestore';
->>>>>>> Stashed changes
 
 const EditPicture = () => {
   const navigate = useNavigate();
@@ -43,8 +38,6 @@ const EditPicture = () => {
   };
 
   const handleRemovePicture = () => {
-    // Perform necessary actions on picture removal
-    // For example, you might want to clear the imageUrl state
     setImageUrl(null);
     setSelectedFile(null);
 };
@@ -83,13 +76,9 @@ const EditPicture = () => {
     <div>
       <ToastContainer />
       <div className="header-profile">
-<<<<<<< Updated upstream
         <ProfilePicture />
-=======
         <ButtonBackHome />
-        {/* Pass the imageUrl to the ProfilePicture component */}
         <ProfilePicturePreview imageUrl={imageUrl} imageFile={selectedFile} />
->>>>>>> Stashed changes
       </div>
 
       <div className="body-profile">

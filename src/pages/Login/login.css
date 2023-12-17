@@ -1,108 +1,112 @@
 .login {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    grid-template-rows: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
     align-items: center;
     height: 100vh;
     background-image: url(../../assets/loginbg.svg);
     background-size: cover;
     background-position: center;
-    padding: 0 10%;
 }
 
 .login .aatbio-com-image {
-    height: 150px;
-    width: 384px;
-    grid-column: 1;
+    width: 300px;
+    height: auto;
+    margin-right: 20%;
 }
 
 .login .overlap {
+    width: 500px;
+    height: 500px;
     background-color: rgba(255, 255, 255, 0.2);
     border-radius: 10px;
-    width: 700px;
-    padding: 80px;
+    padding: 40px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    grid-column: 2;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    margin-left: 5%;
 }
 
-.login .input {
+.login .input,
+.login input[type="text"],
+.login input[type="email"],
+.login input[type="password"] {
     background-color: #555555b2;
     border: none;
     border-radius: 10px;
     color: #c1c1c1;
     font-family: "Inter-Bold", Helvetica;
-    font-size: 25px;
+    font-size: 18px;
     font-weight: 600;
-    padding: 20px;
+    padding: 15px;
     outline: none;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+}
+
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
     width: 100%;
 }
 
-input[type="text"],
-input[type="email"],
-button {
-    margin-bottom: 20px;
+.password-input {
+    flex-grow: 1;
+    padding-right: 40px;
 }
 
-input[type="text"],
-input[type="password"],
-button {
-    margin-bottom: 40px;
+.toggle-password {
+    justify-self: end;
+    /* Memposisikan ikon mata di akhir grid (kanan) */
+    cursor: pointer;
+
 }
 
-p,
-.signup-text {
-    margin-top: 20px;
-}
-
-/* Adjusting styles for the Sign in button */
 .signup-button {
     background-color: #6680c0;
     border: none;
     border-radius: 10px;
     color: #ffffff;
     font-family: "Inter-Bold", Helvetica;
-    font-size: 25px;
+    font-size: 18px;
     font-weight: 700;
-    padding: 20px 20px;
+    margin-top: 15px;
     width: 100%;
+    box-sizing: border-box;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-.signup-button:hover {
-    background-color: #556699;
-}
-
-/* Adjusting styles for the "Already have an account? Sign up" text */
 .login .text-wrapper-2 {
     color: #767479;
     font-family: "Inter-Medium", Helvetica;
-    font-size: 25px;
+    font-size: 20px;
     text-align: right;
 }
 
 .login .text-wrapper-3 {
     color: #ffffff;
     font-family: "Inter-Bold", Helvetica;
-    font-size: 25px;
+    font-size: 20px;
     font-weight: 600;
     cursor: pointer;
-    transition: color 0.3s ease;
 }
 
 .login .text-wrapper-3:hover {
     color: #6680c0;
+    transition: color 0.3s ease;
 }
 
 .login .text-wrapper-5 {
     color: #ffffff;
     font-family: "Inter-Bold", Helvetica;
-    font-size: 60px;
+    font-size: 40px;
     font-weight: 700;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .input-with-icon {
@@ -111,9 +115,11 @@ p,
 
 .eye-icon {
     position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
+    right: 50%;
+    top: 70%;
+    /* Menggeser ikon mata ke tengah secara vertikal */
+    transform: translate(-50%, -50%);
+    /* Untuk mengatur ikon mata tepat di tengah */
     cursor: pointer;
     width: 24px;
     height: 24px;
@@ -126,20 +132,79 @@ p,
 }
 
 .password-input {
-    width: 100%;
     padding-right: 40px;
+    /* Adjust padding to match the button's visual width */
 }
 
 .toggle-password {
     position: absolute;
     right: 20px;
-    top: 35%;
     transform: translateY(-50%);
-    width: 40px;
-    height: 40px;
+    width: 20px;
     cursor: pointer;
+    margin-top: 3px;
 }
 
 .password-wrapper .password-input {
     padding-right: 75px;
+    /* Adjust if necessary */
+}
+
+@media (max-width: 600px) {
+    .login {
+        flex-direction: column;
+        padding: 20px;
+        align-items: center;
+    }
+
+    .login .aatbio-com-image {
+        margin-bottom: 20px;
+        margin-right: 0;
+        width: 150px;
+        /* Adjust as needed */
+    }
+
+    .login .overlap {
+        width: 100%;
+        height: auto;
+        margin-left: 0;
+        margin-top: 20px;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(1px);
+        border-radius: 10px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        /* Align child elements to center */
+    }
+
+    .login .input,
+    .login-page .login-input,
+    .login-page .login-button,
+    .signup-button {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    /* Correct the alignment of the eye icon inside the password field */
+    .eye-icon {
+        position: absolute;
+        right: 12px;
+        /* Match this value with the padding of the input fields */
+        top: 50%;
+        transform: translateY(-50%);
+        width: 24px;
+        /* Adjust size if needed */
+        height: 24px;
+    }
+
+    .login .text-wrapper-2 {
+        width: 100%;
+        text-align: center;
+        font-size: 21px;
+        margin-top: 15px;
+    }
+
 }

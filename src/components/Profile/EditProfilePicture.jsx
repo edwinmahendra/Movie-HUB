@@ -8,13 +8,13 @@ const EditProfilePicture = ({ onFileSelect, onRemovePicture }) => {
         const file = event.target.files[0];
         if (file) {
             setSelectedFile(file);
-            onFileSelect(file); // Notify the parent component of the new file
+            onFileSelect(file); 
         }
     };
   
     const handleRemove = () => {
-        setSelectedFile(null);  // Clear the local state
-        onRemovePicture();      // Notify the parent component to remove the picture
+        setSelectedFile(null);  
+        onRemovePicture();      
     };
 
     return (

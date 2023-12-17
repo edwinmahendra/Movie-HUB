@@ -1,5 +1,5 @@
 .top-rated-container {
-    width: 13%;
+    width: 16%;
     height: 15%;
     background-color: #19161F;
 }
@@ -37,4 +37,6 @@
     text-align: center;
     background-color: rgba(102, 128, 192, 0.8);
     border-radius: 8px;
+    margin-top: 0;
+    margin-bottom: 1rem;
 }

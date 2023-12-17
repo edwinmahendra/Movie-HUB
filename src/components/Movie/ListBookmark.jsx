@@ -1,113 +1,151 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Card from "react-bootstrap/Card";
-import sampleImage from "../../assets/sampleImage.jpg";
-import sampleImage2 from "../../assets/sampleImage2.jpg";
-import sampleImage3 from "../../assets/sampleImage3.jpg";
-import bookmark from '../../assets/bookmark.svg';
+import { collection, getDocs, doc, getDoc, setDoc,deleteDoc,updateDoc, getFirestore } from "firebase/firestore";
+import { useNavigate } from 'react-router';
+import bookmarkon from '../../assets/bookmark.svg';
 import bookmarkoff from '../../assets/bookmark-off.svg';
-
 import "./listBookmark.css";
+import { getAuth } from "firebase/auth";
 
-const ListBookmark = () => {
-    const [isBookmarked, setIsBookmarked] = useState(false);
+const ListBookmark = ({ sorting, userId }) => {
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [bookmarks, setBookmarks] = useState([]);
+  const db = getFirestore();
+  const navigate = useNavigate();
+  const auth = getAuth(); 
 
-    const toggleBookmark = () => {
-      setIsBookmarked(!isBookmarked);
+  useEffect(() => {
+    const fetchBookmarks = async () => {
+      try {
+        const user = auth.currentUser;
+        if (!user) {
+          console.log("No user is currently signed in.");
+          return;
+        }
+    
+        const userId = user.uid;
+        console.log("Current User ID:", userId);
+    
+        // Get the user document
+        const db = getFirestore();
+        const userDocRef = doc(db, 'Users', userId);
+        const userDocSnapshot = await getDoc(userDocRef);
+    
+        if (userDocSnapshot.exists()) {
+          const bookmarksCollection = await getDocs(collection(db, 'Users', userId, 'Bookmarks'));
+    
+          const bookmarksData = bookmarksCollection.docs.map((bookmarkDoc) => {
+            const data = bookmarkDoc.data();
+            data.releaseDate = parseDateString(data.releaseDate);
+            data.dateAdded = parseDateString(data.dateAdded);
+            // console.log("Bookmark Data:", data); // Log the data
+            return data;
+          });
+          setBookmarks(bookmarksData);
+        } else {
+          console.log("User document does not exist.");
+        }
+      } catch (error) {
+        console.error("Error fetching bookmarks:", error);
+      }
     };
+  
+    fetchBookmarks();
+  }, [db, auth]);
+
+
+  
+  const parseDateString = (dateString) => {
+    return new Date(dateString);
+  };
+  const toggleBookmark = async (index) => {
+    const user = auth.currentUser;
+    if (!user) {
+      console.log("No user is currently signed in.");
+      return;
+    }
+  
+    const userId = user.uid;
+    const movieId = bookmarks[index].idMovie;
+  
+    try {
+      const bookmarkRef = doc(db, 'Users', userId, 'Bookmarks', movieId);
+      const bookmarkDocSnapshot = await getDoc(bookmarkRef);
+      console.log(bookmarkDocSnapshot)
+      console.log("IDMOVIE: ",bookmarks[index].idMovie)
+  
+      if (bookmarkDocSnapshot.exists()) {
+        await deleteDoc(bookmarkRef);
+        console.log('Movie removed from bookmarks');
+      } else {
+        await setDoc(bookmarkRef, {
+          idMovie: movieId,
+          title: bookmarks[index].title,
+          releaseDate: bookmarks[index].releaseDate.toISOString(),
+          sinopsis: bookmarks[index].sinopsis,
+          genre: bookmarks[index].genre,
+          posterPath: bookmarks[index].posterPath,
+          dateAdded: new Date().toISOString()
+          // ...
+        });
+        console.log('Movie added to bookmarks');
+      }
+  
+      const updatedBookmarks = [...bookmarks];
+    updatedBookmarks[index].isBookmarked = !updatedBookmarks[index].isBookmarked;
+    setBookmarks(updatedBookmarks);
+    } catch (error) {
+      console.error("Error toggling bookmark:", error);
+    }
+  };
+  
+  const sortBookmarks = (sortingType) => {
+    const sortedBookmarks = [...bookmarks];
+  
+    if (sortingType === "alphabet") {
+      sortedBookmarks.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (sortingType === "date") {
+      sortedBookmarks.sort((a, b) => a.releaseDate - b.releaseDate);
+    } else if (sortingType === "dateAdded") {
+      sortedBookmarks.sort((a, b) => parseDateString(b.dateAdded) - parseDateString(a.dateAdded));
+    }
+  
+    return sortedBookmarks;
+  };
+  const handleClick = (idMovie) => {
+    navigate(`/detail/${idMovie}`);
+}
+
+  const sortedBookmarks = sortBookmarks(sorting || "dateAdded");
+
   return (
     <>
-      <Card className="image">
-        <Card.Img
-          className="posterImg"
-          variant="top"
-          src={sampleImage}
-          alt="Poster"
-        />
+      {sortedBookmarks.map((bookmark, index) => (
+        <Card className="image">
+        <Card.Img className="posterImg" variant="top" src={bookmark.posterPath} alt="Poster"  onClick={() => handleClick(bookmark.idMovie)}/>
         <Card.Body id="body">
           <Card.Title id="title">
-            Conjuring (2013)
+            <span  onClick={() => handleClick(bookmark.idMovie)}>
+              {bookmark.title }
+            </span>
             <img
-            className="bookmark"
-            src={isBookmarked ? bookmarkoff : bookmark}
-            onClick={toggleBookmark}
-          />
-          </Card.Title>
+              className="bookmark"
+              src={bookmark.isBookmarked ? bookmarkoff : bookmarkon}
+              onClick={() => toggleBookmark(index)}
+            />
+            </Card.Title>
 
-          <Card.Text id="movie-date"> Aug 31, 2013 </Card.Text>
-          <Card.Text id="sinopsis">
-            Paranormal investigators Ed and Lorraine Warren work to help a
-            family terrorized by a dark presence in their farmhouse. Forced to
-            confront a powerful entity, the Warrens find themselves caught in
-            the most terrifying case of their lives.{" "}
-          </Card.Text>
-          <Card.Text id="date-added">
-            <b>Date Added:</b> August 29, 2023
-          </Card.Text>
-
-        </Card.Body>
-      </Card>
-      <Card className="image">
-        <Card.Img
-          className="posterImg"
-          variant="top"
-          src={sampleImage2}
-          alt="Poster"
-        />
-        <Card.Body>
-          <Card.Title id="title">
-            Conjuring 2(2016)           
-          <img
-            className="bookmark"
-            src={isBookmarked ? bookmarkoff : bookmark}
-            onClick={toggleBookmark}
-          />
-          </Card.Title>
-
-          <Card.Text id="movie-date"> June 26, 2016 </Card.Text>
-          <Card.Text id="sinopsis">
-            Lorraine and Ed Warren travel to north London to help a single
-            mother raising four children alone in a house plagued by malicious
-            spirits..{" "}
-          </Card.Text>
-          <Card.Text id="date-added">
-            <b>Date Added:</b> August 29, 2023
-          </Card.Text>
-
-        </Card.Body>
-      </Card>
-
-      <Card className="image">
-        <Card.Img
-          className="posterImg"
-          variant="top"
-          src={sampleImage3}
-          alt="Poster"
-        />
-        <Card.Body>
-          <Card.Title id="title">
-            Strays (2023)
-            <img
-            className="bookmark"
-            src={isBookmarked ? bookmarkoff : bookmark}
-            onClick={toggleBookmark}
-          />
-          </Card.Title>
-
-          <Card.Text id="movie-date"> August 17, 2023 </Card.Text>
-          <Card.Text id="sinopsis">
-            When Reggie is abandoned on the mean city streets by his lowlife
-            owner, Doug, Reggie is certain that his beloved owner would never
-            leave him on purpose. But once Reggie falls in with Bug, a
-            fast-talking, foul-mouthed stray who loves his freedom and believes
-            that owners are for suckers, Reggie finally realizes he was in a
-            toxic relationship and ...
-          </Card.Text>
-          <Card.Text id="date-added">
-            <b>Date Added:</b> August 29, 2023
-          </Card.Text>
-
-        </Card.Body>
-      </Card>
+            <Card.Text id="movie-date"  onClick={() => handleClick(bookmark.idMovie)}>
+              {bookmark.releaseDate.toLocaleDateString("en-US", { month: "long", day: "2-digit", year: "numeric" })}
+            </Card.Text>
+            <Card.Text id="genre" onClick={() => handleClick(bookmark.idMovie)}>{bookmark.genre}</Card.Text>
+            <Card.Text id="sinopsis"  onClick={() => handleClick(bookmark.idMovie)}>{bookmark.sinopsis}</Card.Text>
+            <Card.Text id="date-added"  onClick={() => handleClick(bookmark.idMovie)}>
+              <b>Date Added:</b> {bookmark.dateAdded.toLocaleDateString("en-US", { month: "long", day: "2-digit", year: "numeric" })}
+            </Card.Text>
+          </Card.Body>
+        </Card>
+      ))}
     </>
   );
 };

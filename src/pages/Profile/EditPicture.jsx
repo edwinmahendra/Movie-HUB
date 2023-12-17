@@ -17,13 +17,15 @@ const EditPicture = () => {
   const [imageUrl, setImageUrl] = useState(null); // State to hold the uploaded image URL
   const auth = getAuth();
   const db = getFirestore();
-  const storage = getStorage(); // Initialize Firebase Storage
+  const storage = getStorage();
 
   useEffect(() => {
     // Fetch the current user's profile picture URL from Firestore on component mount
     const fetchProfilePic = async () => {
       const userDocRef = doc(db, 'Users', auth.currentUser.uid);
       const userDocSnap = await getDoc(userDocRef);
+
+      console.log('Current user:', auth.currentUser);
 
       if (userDocSnap.exists()) {
         setImageUrl(userDocSnap.data().profilePicture);
@@ -44,7 +46,7 @@ const EditPicture = () => {
 
   const handleSave = async () => {
     if (selectedFile) {
-      const imageRef = ref(storage, `profile_pictures/${auth.currentUser.uid}`);
+      const imageRef = ref(storage, `profilePictures/${auth.currentUser.uid}`);
       uploadBytes(imageRef, selectedFile).then((uploadSnapshot) => {
         getDownloadURL(uploadSnapshot.ref).then((url) => {
           // Update user's profile picture URL in Firestore
@@ -76,8 +78,8 @@ const EditPicture = () => {
     <div>
       <ToastContainer />
       <div className="header-profile">
-        <ProfilePicture />
         <ButtonBackHome />
+        {/* Pass the imageUrl to the ProfilePicture component */}
         <ProfilePicturePreview imageUrl={imageUrl} imageFile={selectedFile} />
       </div>
 

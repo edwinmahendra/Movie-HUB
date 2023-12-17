@@ -1,3 +1,12 @@
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 .login {
     display: flex;
     flex-direction: row;
@@ -7,12 +16,21 @@
     background-image: url(../../assets/loginbg.svg);
     background-size: cover;
     background-position: center;
+    position: relative;
+    animation: fadeIn 1s ease-in-out;
 }
 
 .login .aatbio-com-image {
     width: 300px;
     height: auto;
     margin-right: 20%;
+}
+
+.btn-home-container-login {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    z-index: 50;
 }
 
 .login .overlap {

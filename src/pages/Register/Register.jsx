@@ -17,6 +17,7 @@ import eyeOff from "../../assets/eye-off.svg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Spinner } from "react-bootstrap";
+import ButtonBackHome from "../../components/Profile/ButtonBackHome";
 
 export const Register = () => {
   const [email, setEmail] = useState("");
@@ -26,7 +27,7 @@ export const Register = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [justRegistered, setJustRegistered] = useState(false);
-  
+
   const navigate = useNavigate();
   const auth = getAuth();
   const db = getFirestore();
@@ -118,6 +119,9 @@ export const Register = () => {
   return (
     <div className="register">
       <ToastContainer />
+      <div className="btn-home-container-register">
+        <ButtonBackHome />
+      </div>
       <img className="aatbio-com-image" alt="Aatbio com image" src={logo} />
       <div className="register-content">
         <div className="overlap">

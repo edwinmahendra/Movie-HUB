@@ -9,6 +9,7 @@ import { getAuth } from "firebase/auth";
 
 const ListBookmark = ({ sorting, userId }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [expandedIndexes, setExpandedIndexes] = useState([]);
   const [bookmarks, setBookmarks] = useState([]);
   const db = getFirestore();
   const navigate = useNavigate();
@@ -117,6 +118,13 @@ const ListBookmark = ({ sorting, userId }) => {
 }
 
   const sortedBookmarks = sortBookmarks(sorting || "dateAdded");
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleExpand = (index) => {
+    setExpandedIndexes((prev) =>
+      prev.includes(index) ? prev.filter((item) => item !== index) : [...prev, index]
+    );
+  };
 
   return (
     <>
@@ -139,8 +147,30 @@ const ListBookmark = ({ sorting, userId }) => {
               {bookmark.releaseDate.toLocaleDateString("en-US", { month: "long", day: "2-digit", year: "numeric" })}
             </Card.Text>
             <Card.Text id="genre" onClick={() => handleClick(bookmark.idMovie)}>{bookmark.genre}</Card.Text>
-            <Card.Text id="sinopsis"  onClick={() => handleClick(bookmark.idMovie)}>{bookmark.sinopsis}</Card.Text>
-            <Card.Text id="date-added"  onClick={() => handleClick(bookmark.idMovie)}>
+            <Card.Text id="sinopsis" onClick={toggleExpand}>
+            {isExpanded ? (
+              bookmark.sinopsis
+            ) : (
+              <div className="sinopsis-container">
+            {bookmark.sinopsis.length > 200 && !expandedIndexes.includes(index) ? (
+              <>
+                <p className="sinopsis-text">
+                {`${bookmark.sinopsis.substring(0, 150)} ... `}
+                <span className="see-more" onClick={() => toggleExpand(index)}>
+                    See more
+                </span>
+                </p>
+
+              </>
+            ) : (
+              <div className="sinopsis-text-expanded">
+                {bookmark.sinopsis}
+              </div>
+            )}
+          </div>
+            )}
+          </Card.Text>       
+          <Card.Text id="date-added"  onClick={() => handleClick(bookmark.idMovie)}>
               <b>Date Added:</b> {bookmark.dateAdded.toLocaleDateString("en-US", { month: "long", day: "2-digit", year: "numeric" })}
             </Card.Text>
           </Card.Body>

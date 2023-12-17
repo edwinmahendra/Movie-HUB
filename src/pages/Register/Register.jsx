@@ -1,17 +1,13 @@
-import React, { useEffect, useState } from "react";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
+import React, { useState } from "react";
+import { getAuth, createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import {
   getFirestore,
   doc,
   setDoc,
-  getDocs,
+  collection,
   query,
   where,
-  collection,
+  getDocs,
 } from "firebase/firestore";
 import { useNavigate } from "react-router";
 import "./register.css";
@@ -29,11 +25,11 @@ export const Register = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [justRegistered, setJustRegistered] = useState(false);
+  
   const navigate = useNavigate();
   const auth = getAuth();
   const db = getFirestore();
-
-  useEffect(() => {}, [isLoading]);
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -51,96 +47,65 @@ export const Register = () => {
 
   const handleRegister = async () => {
     setIsLoading(true);
+
+    if (!name || !email || !password || !phoneNumber) {
+      toast.error("Please fill in all fields.");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
+    if (password.length < 6 || password.length > 15) {
+      toast.error("Password must be 6-15 characters long");
+      return;
+    }
+
+    if (!validatePhoneNumber()) {
+      toast.error(
+        "Phone number is not valid. Please enter a valid phone number."
+      );
+      return;
+    }
+
+    const usersRef = collection(db, "Users");
+    const usernameQuery = query(usersRef, where("name", "==", name)); // Assuming 'name' is the field for username
+    const usernameQuerySnapshot = await getDocs(usernameQuery);
+
+    if (!usernameQuerySnapshot.empty) {
+      toast.error("Username is already taken");
+      return;
+    }
+
     try {
-      if (!name || !email || !password || !phoneNumber) {
-        toast.error("Please fill in all fields.");
-        return;
-      }
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const userId = userCredential.user.uid;
 
-      if (!validateEmail(email)) {
-        toast.error("Please enter a valid email address.");
-        return;
-      }
+      await setDoc(doc(db, "Users", userId), {
+        name,
+        email,
+        phoneNumber,
+        description: "",
+        profilePicture: "",
+      });
 
-      if (password.length < 4 || password.length > 15) {
-        toast.error("Password at least 4-15 characters");
-        return;
-      }
-
-      if (!validatePhoneNumber()) {
-        toast.error(
-          "Phone number is not valid. Please enter a valid phone number."
-        );
-        return;
-      }
-
-      const usersRef = collection(db, "Users");
-      const q = query(usersRef, where("name", "==", name));
-      const querySnapshot = await getDocs(q);
-
-      if (!querySnapshot.empty) {
-        toast.error("Username has already been taken");
-        setIsLoading(false);
-        return;
-      }
-
-      if (!validateEmail(email)) {
-        toast.error("Please enter a valid email address.");
-        setIsLoading(false);
-        return;
-      }
-
-      if (!validatePhoneNumber()) {
-        setIsLoading(false);
-        toast.error(
-          "Phone number is not valid. Please enter a valid phone number."
-        );
-        return;
-      }
-      try {
-        const userCredential = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-        const userId = userCredential.user.uid;
-        const docRef = doc(db, "Users", userId);
-        const docSnap = await getDocs(docRef);
-        if (docSnap.exists()) {
-          toast.error("Email has already been taken");
-          return;
-        }
-
-        await setDoc(doc(db, "Users", userId), {
-          name,
-          email,
-          phoneNumber,
-          description: "",
-          profilePicture: "",
-        });
-
-        const currAuth = getAuth();
-        signOut(currAuth)
-          .then(() => {
-            console.log("Logout successful");
-            toast.success("Registration successful!");
-            navigate("/login");
-          })
-          .catch((error) => {
-            console.error("Logout failed:", error);
-          });
-
-      } catch (error) {
-        let errorMessage = "Registration failed. Please try again.";
-        if (error.code === "auth/email-already-in-use") {
-          toast.error("Email has already been taken");
-        } else {
-          toast.error("Failed to register. Please try again.");
-        }
-        console.error("Error in user registration:", error);
-      }
+      await signOut(getAuth());
+      setJustRegistered(true); 
+      toast.success("Registration successful!");
+      navigate("/login");
     } catch (error) {
-      console.log(error);
+      let errorMessage = "Registration failed. Please try again.";
+      if (error.code === "auth/email-already-in-use") {
+        errorMessage = "This email is already in use.";
+      }
+      toast.error(errorMessage);
+      console.error("Error in user registration:", error);
     } finally {
       setIsLoading(false);
     }

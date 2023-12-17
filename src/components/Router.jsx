@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import AppLayout from "./layout/AppLayout";
+import PropagateLoader from "react-spinners/PropagateLoader";
 import Blank from "../pages/Blank";
 import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
@@ -14,7 +15,22 @@ import useAuth from "../setup/Auth";
 import SearchResult from "./Search/SearchResults";
 
 const Router = () => {
-  const { currentUser, isLoading } = useAuth();
+    const { currentUser, isLoading, justRegistered } = useAuth();
+
+    if (isLoading) {
+        return (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+            }}
+          >
+            <PropagateLoader size={30} color="#6680C0" />
+          </div>
+        );
+      }
 
   return (
     <BrowserRouter>
@@ -28,11 +44,11 @@ const Router = () => {
         </Route>
         <Route
           path="/login"
-          element={currentUser ? <Navigate to="/profile" /> : <Login />}
+          element={!currentUser && !justRegistered ? <Login /> : <Navigate to={justRegistered ? "/login" : "/profile"} />}
         />
         <Route
           path="/register"
-          element={currentUser ? <Navigate to="/profile" /> : <Register />}
+          element={!currentUser ? <Register /> : <Navigate to="/login" />}
         />
         <Route path="/detail/:idMovie" element={<Detail />} />
         <Route

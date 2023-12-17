@@ -27,7 +27,7 @@ const MovieList = () => {
         config
       );
       setDataMovies(res.data.results.slice(0, 18));
-      setTotalPages(res.data.total_pages); 
+      setTotalPages(res.data.total_pages);
       setLoading(false);
     } catch (err) {
       console.log(err);
@@ -41,8 +41,8 @@ const MovieList = () => {
   }, []);
 
   useEffect(() => {
-    fetchMovies(currentPage); 
-  }, [currentPage, movieType]); 
+    fetchMovies(currentPage);
+  }, [currentPage, movieType]);
 
   return (
     <div>

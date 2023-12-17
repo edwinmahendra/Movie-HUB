@@ -6,20 +6,20 @@ import TopRated from "../../components/Movie/TopRatedItem";
 import { Button } from "react-bootstrap";
 import SearchBar from "../../components/Movie/SearchBar";
 import SearchResults from "../../components/Search/SearchResults";
-import { Link } from "react-router-dom";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import PopularUpcomingItemShimmer from "../../components/Movie/PopularUpcomingItemShimmer";
 import NowPlayingItemShimmer from "../../components/Movie/NowPlayingItemShimmer";
 
 export default function Home() {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
   const [popularMovies, setPopularMovies] = useState([]);
   const [topRatedMovies, setTopRatedMovies] = useState([]);
   const [upcomingMovies, setUpcomingMovies] = useState([]);
-  const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [query, setQuery] = useState("");
   const nowPlayingShimmerItems = [...Array(4).keys()];
   const shimmerItems = [...Array(6).keys()];
   const location = useLocation();
@@ -27,15 +27,6 @@ export default function Home() {
   const config = {
     headers: { Authorization: `Bearer ${process.env.REACT_APP_MOVIE_TOKEN}` },
   };
-  // useEffect(() => {
-  //   if (!isSearching) {
-  //     setLoading(true);
-  //     fetchDataNowPlaying();
-  //     fetchDataPopular();
-  //     fetchDataTopRated();
-  //     fetchDataUpcoming();
-  //   }
-  // }, [isSearching]);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -44,11 +35,11 @@ export default function Home() {
         handleSearch(searchQuery);
     } else {
       setIsSearching(false);
-        setLoading(true);
-        fetchDataNowPlaying();
-        fetchDataPopular();
-        fetchDataTopRated();
-        fetchDataUpcoming();
+      setLoading(true);
+      fetchDataNowPlaying();
+      fetchDataPopular();
+      fetchDataTopRated();
+      fetchDataUpcoming();
     }
 }, [location.search]);
 
@@ -101,25 +92,11 @@ export default function Home() {
     }
   };
 
-  const handleSearch = async (query) => {
-    if (query) {
-      setIsSearching(true);
-      try {
-        const res = await axios.get(
-          `${
-            process.env.REACT_APP_BASE_URL_MOVIE
-          }search/movie?query=${encodeURIComponent(
-            query
-          )}&language=en-US&page=1&include_adult=false`,
-          config
-        );
-        setSearchResults(res.data.results);
-      } catch (err) {
-        console.log(err);
-      }
-    } else {
-      setIsSearching(false);
-    }
+  const handleSearch = (query) => {
+    navigate({
+      pathname: "/movies/search",
+      search: `?q=${query}`,
+    });
   };
 
   return (
@@ -128,9 +105,6 @@ export default function Home() {
         <SearchBar onSearch={handleSearch} />
       </div>
 
-      {isSearching ? (
-        <SearchResults movies={searchResults} />
-      ) : (
         <>
           <div className="title-section">
             <p className="text-light fs-4 fw-bold">Now Playing 🍿</p>
@@ -213,7 +187,6 @@ export default function Home() {
                 ))}
           </div>
         </>
-      )}
     </div>
   );
 }

@@ -10,6 +10,7 @@ import EditPicture from "../pages/Profile/EditPicture";
 import MovieList from "../pages/MovieList/MovieList";
 import useAuth from "../setup/Auth";
 import SearchResult from "./Search/SearchResults";
+import NotFound404 from "../pages/404";
 
 const Router = () => {
     const { currentUser, justRegistered, resetJustRegistered } = useAuth();
@@ -23,6 +24,7 @@ const Router = () => {
               <Route path="/movies/search" element={<SearchResult />} />
               <Route path="/movies/:movieType" element={<MovieList />} />
               <Route path="/bookmark" element={<Bookmark />} />
+              <Route path="*" element={<NotFound404 />} />
             </Route>
             <Route
               path="/login"

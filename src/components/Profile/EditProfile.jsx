@@ -91,7 +91,7 @@ const EditProfile = ({ onFormDataChange, onPasswordReset }) => {
   }
 
   return (
-    <Container>
+    <Container className="me-1" style={{width: '100%'}}>
       <Row className="mt-2">
         <Col>
           <Form.Label htmlFor="email">Email</Form.Label>

@@ -89,10 +89,7 @@ const EditPicture = () => {
     });
   };
 
-  const showCancelToast = () => {
-    toast.error("Profile Picture Update Cancelled", {
-      position: toast.POSITION.TOP_RIGHT,
-    });
+  const handleCancel = () => {
     navigate("/profile");
   };
 
@@ -125,7 +122,7 @@ const EditPicture = () => {
               <Button
                 variant="primary"
                 className="btn-cancel-profile"
-                onClick={showCancelToast}
+                onClick={handleCancel}
               >
                 Cancel
               </Button>

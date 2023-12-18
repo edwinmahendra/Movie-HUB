@@ -49,70 +49,70 @@ export const Register = () => {
 
   const handleRegister = async () => {
     setIsLoading(true);
-
-    if (!name || !email || !password || !phoneNumber) {
-      toast.error("Please fill in all fields.");
-      return;
-    }
-
-    if (!validateEmail(email)) {
-      toast.error("Please enter a valid email address.");
-      return;
-    }
-
-    if (password.length < 6 || password.length > 15) {
-      toast.error("Password must be 6-15 characters long");
-      return;
-    }
-
-    if (!validatePhoneNumber()) {
-      toast.error(
-        "Phone number is not valid. Please enter a valid phone number."
-      );
-      return;
-    }
-
-    const usersRef = collection(db, "Users");
-    const usernameQuery = query(usersRef, where("name", "==", name)); // Assuming 'name' is the field for username
-    const usernameQuerySnapshot = await getDocs(usernameQuery);
-
-    if (!usernameQuerySnapshot.empty) {
-      toast.error("Username is already taken");
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const userId = userCredential.user.uid;
-
-      await setDoc(doc(db, "Users", userId), {
-        name,
-        email,
-        phoneNumber,
-        description: "",
-        profilePicture: "",
-      });
-
-      await signOut(getAuth());
-      setJustRegistered(true); 
-      toast.success("Registration successful!");
-      setTimeout(() => {
-        navigate("/login");
-      }, 3000);
-    } catch (error) {
-      let errorMessage = "Registration failed. Please try again.";
-      if (error.code === "auth/email-already-in-use") {
-        errorMessage = "This email is already in use.";
+    try{
+      if (!name || !email || !password || !phoneNumber) {
+        toast.error("Please fill in all fields.");
+        return;
       }
-      toast.error(errorMessage);
-      setIsLoading(false);
-      console.error("Error in user registration:", error);
-    } finally {
+  
+      if (!validateEmail(email)) {
+        toast.error("Please enter a valid email address.");
+        return;
+      }
+  
+      if (password.length < 6 || password.length > 15) {
+        toast.error("Password must be 6-15 characters long");
+        return;
+      }
+  
+      if (!validatePhoneNumber()) {
+        toast.error(
+          "Phone number is not valid. Please enter a valid phone number."
+        );
+        return;
+      }
+  
+      const usersRef = collection(db, "Users");
+      const usernameQuery = query(usersRef, where("name", "==", name)); // Assuming 'name' is the field for username
+      const usernameQuerySnapshot = await getDocs(usernameQuery);
+      console.log(usernameQuerySnapshot);
+      if (!usernameQuerySnapshot.empty) {
+        toast.error("Username is already taken");
+        return;
+      }
+  
+      try {
+        setIsLoading(true);
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        const userId = userCredential.user.uid;
+  
+        await setDoc(doc(db, "Users", userId), {
+          name,
+          email,
+          phoneNumber,
+          description: "",
+          profilePicture: "",
+        });
+  
+        toast.success("Registration successful!");
+        // await signOut(getAuth());
+        setJustRegistered(true); 
+        // moveLogin();
+      } catch (error) {
+        let errorMessage = "Registration failed. Please try again.";
+        if (error.code === "auth/email-already-in-use") {
+          errorMessage = "This email is already in use.";
+        }
+        toast.error(errorMessage);
+        console.error("Error in user registration:", error);
+      } 
+    }catch(err){
+      console.error(err);
+    }finally{
       setIsLoading(false);
     }
   };
@@ -121,20 +121,20 @@ export const Register = () => {
     navigate("/login");
   };
 
-  if (isLoading) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <PropagateLoader size={30} color="#6680C0" />
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div
+  //       style={{
+  //         display: "flex",
+  //         justifyContent: "center",
+  //         alignItems: "center",
+  //         height: "100vh",
+  //       }}
+  //     >
+  //       <PropagateLoader size={30} color="#6680C0" />
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="register">
@@ -169,6 +169,7 @@ export const Register = () => {
                 type="tel"
                 placeholder="Phone Number"
                 value={phoneNumber}
+                maxLength={13}
                 onChange={(e) => setPhoneNumber(e.target.value)}
               />
             </div>

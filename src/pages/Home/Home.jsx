@@ -114,7 +114,7 @@ export default function Home() {
           </div>
           <div className="container-now-playing">
             {loading
-              ? nowPlayingShimmerItems.map(() => <NowPlayingItemShimmer />)
+              ? nowPlayingShimmerItems.map((i) => <NowPlayingItemShimmer key={i} />)
               : nowPlayingMovies.map((movie) => (
                   <NowPlayingItem
                     key={movie.id}

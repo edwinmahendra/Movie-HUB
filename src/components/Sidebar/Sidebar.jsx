@@ -134,8 +134,8 @@ const ProfileSidebar = () => {
 
     return (
         <div className="profile_sidebar" onClick={handleClick}>
-            <img className='img_profile' src={userInfo.photoUrl} alt="Profile" />
-            <div className='detail_profile'>
+            <img className='img_profile' src={userInfo.photoUrl} alt="Profile" style={{cursor: 'pointer'}} />
+            <div className='detail_profile' style={{cursor: 'pointer'}}>
                 <span>{userInfo.name}</span>
                 <span>{userInfo.email}</span>
             </div>

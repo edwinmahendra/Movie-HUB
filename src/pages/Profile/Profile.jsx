@@ -67,10 +67,8 @@ const Profile = () => {
     }
   };
 
-  const showCancelToast = () => {
-    toast.error("Edit Profile Cancelled", {
-      position: toast.POSITION.TOP_RIGHT,
-    });
+  const handleCancel = () => {
+    navigate("/");
   };
 
   return (
@@ -101,7 +99,7 @@ const Profile = () => {
               <Button
                 variant="primary"
                 className="btn-cancel-profile"
-                onClick={showCancelToast}
+                onClick={handleCancel}
               >
                 Cancel
               </Button>

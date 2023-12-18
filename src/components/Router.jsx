@@ -1,7 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import AppLayout from "./layout/AppLayout";
-import PropagateLoader from "react-spinners/PropagateLoader";
-import Blank from "../pages/Blank";
 import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
@@ -10,7 +8,6 @@ import Bookmark from "../pages/Bookmark/Bookmark";
 import Profile from "../pages/Profile/Profile";
 import EditPicture from "../pages/Profile/EditPicture";
 import MovieList from "../pages/MovieList/MovieList";
-import ConfirmLogoutModal from "./Logout/ConfirmLogoutModal";
 import useAuth from "../setup/Auth";
 import SearchResult from "./Search/SearchResults";
 

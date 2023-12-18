@@ -25,7 +25,18 @@
     border-radius: 20px;
 }
 
+.no-bookmarks-message .sorry{
+    color: white;
+    font-size: 35px;
+    font-weight: bolder;
+}
 
+.no-bookmarks-message {
+    text-align: center;
+    font-size: 35px;
+    margin-top: 200px;
+    color: #767479;
+  }
 
 .sinopsis-container {
     position: relative;

@@ -8,12 +8,12 @@ import "./listBookmark.css";
 import { getAuth } from "firebase/auth";
 
 const ListBookmark = ({ sorting, userId }) => {
-  const [isBookmarked, setIsBookmarked] = useState(false);
   const [expandedIndexes, setExpandedIndexes] = useState([]);
   const [bookmarks, setBookmarks] = useState([]);
   const db = getFirestore();
   const navigate = useNavigate();
   const auth = getAuth(); 
+  
 
   useEffect(() => {
     const fetchBookmarks = async () => {
@@ -60,6 +60,7 @@ const ListBookmark = ({ sorting, userId }) => {
     return new Date(dateString);
   };
   const toggleBookmark = async (index) => {
+    console.log(index)
     const user = auth.currentUser;
     if (!user) {
       console.log("No user is currently signed in.");
@@ -118,14 +119,17 @@ const ListBookmark = ({ sorting, userId }) => {
 }
 
   const sortedBookmarks = sortBookmarks(sorting || "dateAdded");
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded] = useState(false);
 
   const toggleExpand = (index) => {
     setExpandedIndexes((prev) =>
       prev.includes(index) ? prev.filter((item) => item !== index) : [...prev, index]
     );
   };
-
+  
+  if (sortedBookmarks.length === 0) {
+    return <div className="no-bookmarks-message"><span className="sorry">Sorry,</span><br></br>you haven't added anything yet.</div>;
+  }
   return (
     <>
       {sortedBookmarks.map((bookmark, index) => (
@@ -152,7 +156,7 @@ const ListBookmark = ({ sorting, userId }) => {
               bookmark.sinopsis
             ) : (
               <div className="sinopsis-container">
-            {bookmark.sinopsis.length > 200 && !expandedIndexes.includes(index) ? (
+            {bookmark.sinopsis.length > 170 && !expandedIndexes.includes(index) ? (
               <>
                 <p className="sinopsis-text">
                 {`${bookmark.sinopsis.substring(0, 150)} ... `}

@@ -83,7 +83,6 @@ export const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-
             <div className="password-wrapper">
               <input
                 className="input password-input"
@@ -111,7 +110,7 @@ export const Login = () => {
             <div className="text-wrapper-2">
               New to MovieHub?{" "}
               <span className="text-wrapper-3" onClick={clickRegister}>
-                Sign Up now.
+                Sign Up now
               </span>
             </div>
           </div>

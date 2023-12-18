@@ -18,6 +18,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Spinner } from "react-bootstrap";
 import ButtonBackHome from "../../components/Profile/ButtonBackHome";
+import { PropagateLoader } from "react-spinners";
 
 export const Register = () => {
   const [email, setEmail] = useState("");
@@ -81,6 +82,7 @@ export const Register = () => {
     }
 
     try {
+      setIsLoading(true);
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -99,13 +101,16 @@ export const Register = () => {
       await signOut(getAuth());
       setJustRegistered(true); 
       toast.success("Registration successful!");
-      navigate("/login");
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
     } catch (error) {
       let errorMessage = "Registration failed. Please try again.";
       if (error.code === "auth/email-already-in-use") {
         errorMessage = "This email is already in use.";
       }
       toast.error(errorMessage);
+      setIsLoading(false);
       console.error("Error in user registration:", error);
     } finally {
       setIsLoading(false);
@@ -115,6 +120,21 @@ export const Register = () => {
   const moveLogin = () => {
     navigate("/login");
   };
+
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <PropagateLoader size={30} color="#6680C0" />
+      </div>
+    );
+  }
 
   return (
     <div className="register">

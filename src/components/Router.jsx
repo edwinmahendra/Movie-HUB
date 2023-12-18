@@ -15,50 +15,37 @@ import useAuth from "../setup/Auth";
 import SearchResult from "./Search/SearchResults";
 
 const Router = () => {
-    const { currentUser, isLoading, justRegistered } = useAuth();
+    const { currentUser, justRegistered, resetJustRegistered } = useAuth();
 
-    if (isLoading) {
-        return (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100vh",
-            }}
-          >
-            <PropagateLoader size={30} color="#6680C0" />
-          </div>
-        );
-      }
-
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<AppLayout />}>
-          <Route index element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/movies/search" element={<SearchResult />} />
-          <Route path="/movies/:movieType" element={<MovieList />} />
-          <Route path="/bookmark" element={<Bookmark />} />
-        </Route>
-        <Route
-          path="/login"
-          element={!currentUser && !justRegistered ? <Login /> : <Navigate to={justRegistered ? "/login" : "/profile"} />}
-        />
-        <Route
-          path="/register"
-          element={!currentUser ? <Register /> : <Navigate to="/login" />}
-        />
-        <Route path="/detail/:idMovie" element={<Detail />} />
-        <Route
-          path="/profile"
-          element={currentUser ? <Profile /> : <Navigate to="/login" />}
-        />
-        <Route path="/edit-profile-pic" element={<EditPicture />} />
-      </Routes>
-    </BrowserRouter>
-  );
+    return (
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<AppLayout />}>
+              <Route index element={<Home />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/movies/search" element={<SearchResult />} />
+              <Route path="/movies/:movieType" element={<MovieList />} />
+              <Route path="/bookmark" element={<Bookmark />} />
+            </Route>
+            <Route
+              path="/login"
+              element={
+                !currentUser ? <Login /> : (justRegistered ? <Navigate to="/login" replace onNavigate={resetJustRegistered} /> : <Navigate to="/home" />)
+              }
+            />
+            <Route
+              path="/register"
+              element={!currentUser ? <Register /> : <Navigate to="/login" />}
+            />
+            <Route path="/detail/:idMovie" element={<Detail />} />
+            <Route
+              path="/profile"
+              element={currentUser ? <Profile /> : <Navigate to="/login" />}
+            />
+            <Route path="/edit-profile-pic" element={<EditPicture />} />
+          </Routes>
+        </BrowserRouter>
+      );
 };
 
 export default Router;

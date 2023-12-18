@@ -3,15 +3,14 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const useAuth = () => {
   const [currentUser, setCurrentUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [justRegistered, setJustRegistered] = useState(false);
 
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
-      setIsLoading(false);
-      if (user === null && justRegistered) {
+      // Reset justRegistered if the user is logged out
+      if (!user && justRegistered) {
         setJustRegistered(false);
       }
     });
@@ -19,7 +18,10 @@ const useAuth = () => {
     return unsubscribe;
   }, [justRegistered]);
 
-  return { currentUser, isLoading, justRegistered, setJustRegistered };
+  // Function to manually set justRegistered (used in the registration process)
+  const resetJustRegistered = () => setJustRegistered(false);
+
+  return { currentUser, justRegistered, setJustRegistered, resetJustRegistered };
 };
 
 export default useAuth;

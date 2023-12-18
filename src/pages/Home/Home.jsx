@@ -61,7 +61,7 @@ export default function Home() {
         `${process.env.REACT_APP_BASE_URL_MOVIE}movie/popular?language=en-US&page=1&region`,
         config
       );
-      setPopularMovies(res.data.results.slice(0, 6));
+      setPopularMovies(res.data.results.slice(4, 10));
     } catch (err) {
       console.log(err);
     }
@@ -114,7 +114,7 @@ export default function Home() {
           </div>
           <div className="container-now-playing">
             {loading
-              ? nowPlayingShimmerItems.map(() => <NowPlayingItemShimmer />)
+              ? nowPlayingShimmerItems.map((i) => <NowPlayingItemShimmer key={i} />)
               : nowPlayingMovies.map((movie) => (
                   <NowPlayingItem
                     key={movie.id}

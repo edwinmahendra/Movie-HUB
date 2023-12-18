@@ -73,29 +73,15 @@ const ListBookmark = ({ sorting, userId }) => {
     try {
       const bookmarkRef = doc(db, 'Users', userId, 'Bookmarks', movieId);
       const bookmarkDocSnapshot = await getDoc(bookmarkRef);
-      console.log(bookmarkDocSnapshot)
-      console.log("IDMOVIE: ",bookmarks[index].idMovie)
   
       if (bookmarkDocSnapshot.exists()) {
         await deleteDoc(bookmarkRef);
         console.log('Movie removed from bookmarks');
+        // Remove the bookmark from the local state
+        setBookmarks(currentBookmarks => currentBookmarks.filter((_, i) => i !== index));
       } else {
-        await setDoc(bookmarkRef, {
-          idMovie: movieId,
-          title: bookmarks[index].title,
-          releaseDate: bookmarks[index].releaseDate.toISOString(),
-          sinopsis: bookmarks[index].sinopsis,
-          genre: bookmarks[index].genre,
-          posterPath: bookmarks[index].posterPath,
-          dateAdded: new Date().toISOString()
-          // ...
-        });
-        console.log('Movie added to bookmarks');
+        // Add bookmark logic (if needed)
       }
-  
-      const updatedBookmarks = [...bookmarks];
-    updatedBookmarks[index].isBookmarked = !updatedBookmarks[index].isBookmarked;
-    setBookmarks(updatedBookmarks);
     } catch (error) {
       console.error("Error toggling bookmark:", error);
     }

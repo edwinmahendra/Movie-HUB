@@ -9,6 +9,8 @@ import ConfirmLogoutModal from '../Logout/ConfirmLogoutModal';
 import { LuLogOut } from "react-icons/lu";
 import { LuLogIn } from "react-icons/lu";
 
+const defaultProfilePic = "https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg";
+
 const sidebarItems = [
     {
         display: "Home", 
@@ -100,11 +102,18 @@ const ProfileSidebar = () => {
         if (user) {
             const userDocRef = doc(db, "Users", user.uid);
             getDoc(userDocRef).then((docSnap) => {
-                if (docSnap.exists()) {
+                if (docSnap.exists() && docSnap.data().profilePicture) {
                     setUserInfo({
                         name: docSnap.data().name || user.displayName || 'No Name',
                         email: user.email,
-                        photoUrl: docSnap.data().profilePicture || user.photoURL || "https://via.placeholder.com/50x50",
+                        photoUrl: docSnap.data().profilePicture,
+                        isLoading: false
+                    });
+                } else {
+                    setUserInfo({
+                        name: user.displayName || 'No Name',
+                        email: user.email,
+                        photoUrl: defaultProfilePic,
                         isLoading: false
                     });
                 }
@@ -134,8 +143,8 @@ const ProfileSidebar = () => {
 
     return (
         <div className="profile_sidebar" onClick={handleClick}>
-            <img className='img_profile' src={userInfo.photoUrl} alt="Profile" />
-            <div className='detail_profile'>
+            <img className='img_profile' src={userInfo.photoUrl} alt="Profile" style={{cursor: 'pointer'}} />
+            <div className='detail_profile' style={{cursor: 'pointer'}}>
                 <span>{userInfo.name}</span>
                 <span>{userInfo.email}</span>
             </div>

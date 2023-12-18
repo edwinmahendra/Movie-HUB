@@ -1,49 +1,69 @@
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 .register {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    grid-template-rows: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
     align-items: center;
     height: 100vh;
     background-image: url(../../assets/registerbg.svg);
     background-size: cover;
     background-position: center;
-    padding: 0 10%;
+    position: relative;
+    animation: fadeIn 1s ease-in-out;
 }
 
 .register .aatbio-com-image {
-    height: 150px;
-    width: 384px;
-    grid-column: 1;
+    width: 300px;
+    height: auto;
+    margin-right: 20%;
+}
+
+.btn-home-container-register {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    z-index: 50;
 }
 
 
 .register .overlap {
+    width: 500px;
+    height: 650px;
     background-color: rgba(255, 255, 255, 0.2);
     border-radius: 10px;
-    height: 650px;
-    width: 700px;
-    padding-left: 70px;
-    padding-right: 70px;
-    padding-top: 40px;
-    padding-bottom: 0px;
+    padding: 40px;
     display: flex;
     flex-direction: column;
-    grid-column: 2;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    margin-left: 5%;
 }
 
 
-
-.register .input {
+.register .input,
+.register input[type="text"],
+.register input[type="email"],
+.register input[type="password"] {
     background-color: #555555b2;
     border: none;
     border-radius: 10px;
     color: #c1c1c1;
     font-family: "Inter-Bold", Helvetica;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
-    padding: 20px;
+    padding: 15px;
     outline: none;
     width: 100%;
+    box-sizing: border-box;
     backdrop-filter: blur(5px);
 }
 
@@ -55,27 +75,13 @@ button {
 }
 
 
-input[type="password"]{
-    margin-bottom: 40px;
+input[type="password"] {
+    margin-bottom: 12px;
 }
 
 p,
 .signup-text {
     margin-top: 20px;
-}
-
-.signup-button {
-    background-color: #6680c0;
-    border: none;
-    border-radius: 10px;
-    color: #ffffff;
-    font-family: "Inter-Bold", Helvetica;
-    font-size: 25px;
-    font-weight: 700;
-    padding: 20px 20px;
-    width: 100%;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
 .signup-button:hover {
@@ -117,9 +123,11 @@ p,
 
 .eye-icon {
     position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
+    right: 50%;
+    top: 70%;
+    /* Menggeser ikon mata ke tengah secara vertikal */
+    transform: translate(-50%, -50%);
+    /* Untuk mengatur ikon mata tepat di tengah */
     cursor: pointer;
     width: 24px;
     height: 24px;
@@ -127,11 +135,10 @@ p,
 
 .password-wrapper {
     position: relative;
-    display: inline-block;
+    display: flex;
+    align-items: center;
     width: 100%;
 }
-
-
 
 .password-input {
     padding-right: 70px;
@@ -144,20 +151,19 @@ p,
     font-size: 20px;
     font-weight: 600;
     padding-top: 20px;
-    padding-bottom: 20px ;
+    padding-bottom: 20px;
     padding-left: 20px;
     outline: none;
     width: 100%;
     backdrop-filter: blur(5px);
 }
 
-
 .toggle-password {
     position: absolute;
     right: 20px;
     top: 35%;
     transform: translateY(-50%);
-    width: 40px;
-    height: 40px;
+    width: 28px;
+    height: 28px;
     cursor: pointer;
 }

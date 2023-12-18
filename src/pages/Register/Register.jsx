@@ -1,13 +1,24 @@
 import React, { useState } from "react";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc, query, where, collection } from "firebase/firestore";
+import { getAuth, createUserWithEmailAndPassword, signOut } from "firebase/auth";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import { useNavigate } from "react-router";
 import "./register.css";
 import logo from "../../assets/logo.svg";
 import eyeOn from "../../assets/eye.svg";
 import eyeOff from "../../assets/eye-off.svg";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Spinner } from "react-bootstrap";
+import ButtonBackHome from "../../components/Profile/ButtonBackHome";
+import { PropagateLoader } from "react-spinners";
 
 export const Register = () => {
   const [email, setEmail] = useState("");
@@ -15,6 +26,8 @@ export const Register = () => {
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [justRegistered, setJustRegistered] = useState(false);
 
   const navigate = useNavigate();
   const auth = getAuth();
@@ -35,71 +48,72 @@ export const Register = () => {
   };
 
   const handleRegister = async () => {
-    if (!name || !email || !password || !phoneNumber) {
-      toast.error("Please fill in all fields.");
-      return;
-    }
-
-    if (!validateEmail(email)) {
-      toast.error("Please enter a valid email address.");
-      return;
-    }
-
-    if (password.length < 4 || password.length > 15) {
-      toast.error("Password at least 4-15 characters");
-      return;
-    }
-
-    if (!validatePhoneNumber()) {
-      toast.error("Phone number is not valid. Please enter a valid phone number.");
-      return;
-    }
-
-    const usersRef = collection(db, "Users");
-    const q = query(usersRef, where("name", "==", name));
-    const querySnapshot = await getDoc(q);
-    if (!querySnapshot.empty) {
-      toast.error("Username has already been taken");
-      return;
-    }
-
-    if (!validateEmail(email)) {
-      toast.error("Please enter a valid email address.");
-      return;
-    }
-
-    if (!validatePhoneNumber()) {
-      toast.error("Phone number is not valid. Please enter a valid phone number.");
-      return;
-    }
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const userId = userCredential.user.uid;
-      const docRef = doc(db, "Users", userId);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        toast.error("Email has already been taken");
+    setIsLoading(true);
+    try{
+      if (!name || !email || !password || !phoneNumber) {
+        toast.error("Please fill in all fields.");
         return;
       }
-      
-      await setDoc(doc(db, "Users", userId), {
-        name,
-        email,
-        phoneNumber,
-        description: "",
-        profilePicture: "",
-      });
-
-      toast.success("Registration successful!");
-      navigate("/login");
-    } catch (error) {
-      let errorMessage = "Registration failed. Please try again.";
-      if (error.code === "auth/email-already-in-use") {
-        toast.error("Email has already been taken");
-      } else {
-        toast.error("Failed to register. Please try again.");
+  
+      if (!validateEmail(email)) {
+        toast.error("Please enter a valid email address.");
+        return;
       }
-      console.error("Error in user registration:", error);
+  
+      if (password.length < 6 || password.length > 15) {
+        toast.error("Password must be 6-15 characters long");
+        return;
+      }
+  
+      if (!validatePhoneNumber()) {
+        toast.error(
+          "Phone number is not valid. Please enter a valid phone number."
+        );
+        return;
+      }
+  
+      const usersRef = collection(db, "Users");
+      const usernameQuery = query(usersRef, where("name", "==", name)); // Assuming 'name' is the field for username
+      const usernameQuerySnapshot = await getDocs(usernameQuery);
+      console.log(usernameQuerySnapshot);
+      if (!usernameQuerySnapshot.empty) {
+        toast.error("Username is already taken");
+        return;
+      }
+  
+      try {
+        setIsLoading(true);
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        const userId = userCredential.user.uid;
+  
+        await setDoc(doc(db, "Users", userId), {
+          name,
+          email,
+          phoneNumber,
+          description: "",
+          profilePicture: "",
+        });
+  
+        toast.success("Registration successful!");
+        // await signOut(getAuth());
+        setJustRegistered(true); 
+        // moveLogin();
+      } catch (error) {
+        let errorMessage = "Registration failed. Please try again.";
+        if (error.code === "auth/email-already-in-use") {
+          errorMessage = "This email is already in use.";
+        }
+        toast.error(errorMessage);
+        console.error("Error in user registration:", error);
+      } 
+    }catch(err){
+      console.error(err);
+    }finally{
+      setIsLoading(false);
     }
   };
 
@@ -107,9 +121,27 @@ export const Register = () => {
     navigate("/login");
   };
 
+  // if (isLoading) {
+  //   return (
+  //     <div
+  //       style={{
+  //         display: "flex",
+  //         justifyContent: "center",
+  //         alignItems: "center",
+  //         height: "100vh",
+  //       }}
+  //     >
+  //       <PropagateLoader size={30} color="#6680C0" />
+  //     </div>
+  //   );
+  // }
+
   return (
     <div className="register">
       <ToastContainer />
+      <div className="btn-home-container-register">
+        <ButtonBackHome />
+      </div>
       <img className="aatbio-com-image" alt="Aatbio com image" src={logo} />
       <div className="register-content">
         <div className="overlap">
@@ -137,6 +169,7 @@ export const Register = () => {
                 type="tel"
                 placeholder="Phone Number"
                 value={phoneNumber}
+                maxLength={13}
                 onChange={(e) => setPhoneNumber(e.target.value)}
               />
             </div>
@@ -156,11 +189,17 @@ export const Register = () => {
               />
             </div>
             <button className="signup-button" onClick={handleRegister}>
-              Sign up
+              {isLoading ? (
+                <Spinner animation="border" role="status"></Spinner>
+              ) : (
+                <span>Sign up</span>
+              )}
             </button>
             <div className="text-wrapper-2">
               Already have an Account?{" "}
-              <span className="text-wrapper-3" onClick={moveLogin}>Sign In</span>
+              <span className="text-wrapper-3" onClick={moveLogin}>
+                Sign In
+              </span>
             </div>
           </div>
         </div>

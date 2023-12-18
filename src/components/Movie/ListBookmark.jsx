@@ -14,32 +14,33 @@ const ListBookmark = ({ sorting, userId }) => {
   const navigate = useNavigate();
   const auth = getAuth(); 
   
-
   useEffect(() => {
     const fetchBookmarks = async () => {
       try {
         const user = auth.currentUser;
         if (!user) {
+
           console.log("No user is currently signed in.");
-          return;
         }
-    
+
         const userId = user.uid;
         console.log("Current User ID:", userId);
-    
+
         // Get the user document
         const db = getFirestore();
-        const userDocRef = doc(db, 'Users', userId);
+        const userDocRef = doc(db, "Users", userId);
         const userDocSnapshot = await getDoc(userDocRef);
-    
+
         if (userDocSnapshot.exists()) {
-          const bookmarksCollection = await getDocs(collection(db, 'Users', userId, 'Bookmarks'));
-    
+          const bookmarksCollection = await getDocs(
+            collection(db, "Users", userId, "Bookmarks")
+          );
+
           const bookmarksData = bookmarksCollection.docs.map((bookmarkDoc) => {
             const data = bookmarkDoc.data();
+            data.id = bookmarkDoc.id; // Include the Firestore document ID
             data.releaseDate = parseDateString(data.releaseDate);
             data.dateAdded = parseDateString(data.dateAdded);
-            // console.log("Bookmark Data:", data); // Log the data
             return data;
           });
           setBookmarks(bookmarksData);
@@ -50,8 +51,9 @@ const ListBookmark = ({ sorting, userId }) => {
         console.error("Error fetching bookmarks:", error);
       }
     };
-  
+
     fetchBookmarks();
+
   }, [db, auth]);
 
 
@@ -59,26 +61,26 @@ const ListBookmark = ({ sorting, userId }) => {
   const parseDateString = (dateString) => {
     return new Date(dateString);
   };
-  const toggleBookmark = async (index) => {
-    console.log(index)
+  const toggleBookmark = async (bookmarkId) => {
     const user = auth.currentUser;
     if (!user) {
       console.log("No user is currently signed in.");
       return;
     }
-  
+
     const userId = user.uid;
-    const movieId = bookmarks[index].idMovie;
-  
+
     try {
-      const bookmarkRef = doc(db, 'Users', userId, 'Bookmarks', movieId);
+      const bookmarkRef = doc(db, "Users", userId, "Bookmarks", bookmarkId);
       const bookmarkDocSnapshot = await getDoc(bookmarkRef);
-  
+
       if (bookmarkDocSnapshot.exists()) {
         await deleteDoc(bookmarkRef);
-        console.log('Movie removed from bookmarks');
+        console.log("Bookmark removed from bookmarks");
         // Remove the bookmark from the local state
-        setBookmarks(currentBookmarks => currentBookmarks.filter((_, i) => i !== index));
+        setBookmarks((currentBookmarks) =>
+          currentBookmarks.filter((bookmark) => bookmark.id !== bookmarkId)
+        );
       } else {
         // Add bookmark logic (if needed)
       }
@@ -86,6 +88,7 @@ const ListBookmark = ({ sorting, userId }) => {
       console.error("Error toggling bookmark:", error);
     }
   };
+
   
   const sortBookmarks = (sortingType) => {
     const sortedBookmarks = [...bookmarks];
@@ -113,9 +116,7 @@ const ListBookmark = ({ sorting, userId }) => {
     );
   };
   
-  if (sortedBookmarks.length === 0) {
-    return <div className="no-bookmarks-message"><span className="sorry">Sorry,</span><br></br>you haven't added anything yet.</div>;
-  }
+
   return (
     <>
       {sortedBookmarks.map((bookmark, index) => (
@@ -129,7 +130,7 @@ const ListBookmark = ({ sorting, userId }) => {
             <img
               className="bookmark"
               src={bookmark.isBookmarked ? bookmarkoff : bookmarkon}
-              onClick={() => toggleBookmark(index)}
+              onClick={() => toggleBookmark(bookmark.id)}
             />
             </Card.Title>
 
@@ -145,7 +146,7 @@ const ListBookmark = ({ sorting, userId }) => {
             {bookmark.sinopsis.length > 170 && !expandedIndexes.includes(index) ? (
               <>
                 <p className="sinopsis-text">
-                {`${bookmark.sinopsis.substring(0, 150)} ... `}
+                {`${bookmark.sinopsis.substring(0, 140)} ... `}
                 <span className="see-more" onClick={() => toggleExpand(index)}>
                     See more
                 </span>

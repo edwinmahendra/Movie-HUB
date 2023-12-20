@@ -73,7 +73,7 @@ export const Register = () => {
       }
   
       const usersRef = collection(db, "Users");
-      const usernameQuery = query(usersRef, where("name", "==", name)); // Assuming 'name' is the field for username
+      const usernameQuery = query(usersRef, where("name", "==", name)); 
       const usernameQuerySnapshot = await getDocs(usernameQuery);
       console.log(usernameQuerySnapshot);
       if (!usernameQuerySnapshot.empty) {

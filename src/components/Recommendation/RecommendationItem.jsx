@@ -1,5 +1,5 @@
 import React from "react";
-import "./RecommendationItem.css"
+import "./RecommendationItem.css";
 import { useNavigate } from "react-router-dom";
 import placeholderPoster from "../../assets/placeholder_poster_land.png";
 
@@ -22,8 +22,8 @@ const RecommendationItem = ({ movieId, title, pictUrl, releaseDate }) => {
         className="recommendation-image"
         src={process.env.REACT_APP_BASE_URL_IMG_MOVIE + pictUrl}
         onError={({ currentTarget }) => {
-          currentTarget.onerror = null; 
-          currentTarget.src=placeholderPoster;
+          currentTarget.onerror = null;
+          currentTarget.src = placeholderPoster;
         }}
         onClick={handleClick}
       ></img>

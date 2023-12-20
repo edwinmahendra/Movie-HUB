@@ -235,8 +235,8 @@ export const Detail = () => {
               process.env.REACT_APP_BASE_URL_IMG_MOVIE + dataMovies.poster_path
             }
             onError={({ currentTarget }) => {
-              currentTarget.onerror = null; 
-              currentTarget.src=placeholderPoster;
+              currentTarget.onerror = null;
+              currentTarget.src = placeholderPoster;
             }}
           />
           <img

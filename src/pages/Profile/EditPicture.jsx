@@ -68,7 +68,9 @@ const EditPicture = () => {
             const userDocRef = doc(db, "Users", auth.currentUser.uid);
             updateDoc(userDocRef, { profilePicture: url }).then(() => {
               setImageUrl(url);
-              showSuccessToast();
+              toast.success("Profile Picture Updated Successfully", {
+                position: toast.POSITION.TOP_RIGHT,
+              });
               navigate("/profile");
             });
           });
@@ -79,14 +81,10 @@ const EditPicture = () => {
           });
         });
     } else {
-      showSuccessToast();
+      toast.success("Profile Picture Updated Successfully", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
     }
-  };
-
-  const showSuccessToast = () => {
-    toast.success("Profile Picture Updated Successfully", {
-      position: toast.POSITION.TOP_RIGHT,
-    });
   };
 
   const handleCancel = () => {

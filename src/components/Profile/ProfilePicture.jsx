@@ -20,7 +20,7 @@ const ProfilePicture = ({ imageUrl }) => {
 
       <IconContext.Provider value={{
         color: "white",
-        size: "30px",
+        size: "40px",
         className: "rounded-circle border border-5 position-absolute",
         style: { backgroundColor: "black", padding: "6px", bottom: "8px", right: "24px" }
       }}>

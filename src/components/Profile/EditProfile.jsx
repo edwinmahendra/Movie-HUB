@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from "react";
 import { Form, Container, Row, Col, Button } from "react-bootstrap";
 import { getAuth, sendPasswordResetEmail, signOut } from "firebase/auth";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
@@ -7,7 +7,7 @@ import { Modal } from "react-bootstrap";
 import { PropagateLoader } from "react-spinners";
 import InputPassword from "./InputPassword.jsx";
 
-const EditProfile = ({ onFormDataChange, onPasswordReset }) => {
+const EditProfile = forwardRef(({ onFormDataChange, onPasswordReset }, ref) => {
   const auth = getAuth();
   const db = getFirestore();
   const [showResetDialog, setShowResetDialog] = useState(false);
@@ -36,6 +36,32 @@ const EditProfile = ({ onFormDataChange, onPasswordReset }) => {
         });
     }
   }, [auth, db]);
+
+  const validateEmail = (email) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+  };
+
+  const validatePhoneNumber = (phoneNumber) => {
+    const phonePattern = /^[0-9]{7,15}$/;
+    return phonePattern.test(phoneNumber);
+  };
+
+  const validateFields = () => {
+    if (!validateEmail(formData.email)) {
+      return "Invalid email format.";
+    }
+
+    if (!validatePhoneNumber(formData.phoneNumber)) {
+      return "Invalid phone number format.";
+    }
+
+    return ""; 
+  };
+
+  useImperativeHandle(ref, () => ({
+    validateFields,
+  }));
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -169,6 +195,6 @@ const EditProfile = ({ onFormDataChange, onPasswordReset }) => {
       </Modal>
     </Container>
   );
-};
+});
 
 export default EditProfile;

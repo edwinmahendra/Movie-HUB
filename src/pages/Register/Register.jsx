@@ -97,8 +97,7 @@ export const Register = () => {
           description: "",
           profilePicture: "",
         });
-  
-        toast.success("Registration successful!");
+
         // await signOut(getAuth());
         setJustRegistered(true); 
         // moveLogin();

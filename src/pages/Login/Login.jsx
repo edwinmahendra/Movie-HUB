@@ -44,8 +44,7 @@ export const Login = () => {
 
       try {
         await signInWithEmailAndPassword(auth, email, password);
-        toast.success("Logged in successfully!");
-        navigate("/");
+        setTimeout(() => navigate("/"), 1000);
       } catch (error) {
         toast.error("Failed to log in. Please check your credentials.");
         console.error("Error in user login:", error);

@@ -72,7 +72,7 @@ const EditPicture = () => {
       toast.success("Profile Picture Updated Successfully", {
         position: toast.POSITION.TOP_RIGHT,
       });
-      setTimeout(() => navigate("/profile"), 3000);
+      setTimeout(() => navigate("/profile"), 2000);
     }
   };
 

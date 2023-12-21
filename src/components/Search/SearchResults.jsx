@@ -4,9 +4,9 @@ import { DropdownButton, Dropdown, Button } from "react-bootstrap";
 import "./SearchResults.css";
 import MoviePagination from "../Pagination/MoviePagination";
 import axios from "axios";
-import { useSearchParams, } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import SearchBar from "../Movie/SearchBar";
-import { PropagateLoader } from "react-spinners"
+import { PropagateLoader } from "react-spinners";
 import FilterMovie from "../Movie/FilterMovie";
 
 const SearchResult = () => {
@@ -19,7 +19,7 @@ const SearchResult = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [showFilter, setShowFilter] = useState(false);
   const [appliedGenres, setAppliedGenres] = useState([]);
-  const [filteredMovies, setFilteredMovies] = useState([]); 
+  const [filteredMovies, setFilteredMovies] = useState([]);
   const baseUrl = "https://image.tmdb.org/t/p/w500";
 
   const config = {
@@ -116,14 +116,18 @@ const SearchResult = () => {
   if (isLoading) {
     return (
       <div
-        style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
-        <PropagateLoader
-          size={30}
-          color="#6680C0" />
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <PropagateLoader size={30} color="#6680C0" />
       </div>
     );
-  }else if(!isLoading && searchResults.length === 0){
-        return (
+  } else if (!isLoading && searchResults.length === 0) {
+    return (
       <div>
         <div className="container-search-home">
           <SearchBar onSearch={handleSearch} />
@@ -155,7 +159,9 @@ const SearchResult = () => {
             Date Newest-First
           </Dropdown.Item>
         </DropdownButton>
-        <Button id="filter" onClick={() => showFilterModal(true)}>Filter</Button>
+        <Button id="filter" onClick={() => showFilterModal(true)}>
+          Filter
+        </Button>
       </div>
       <div className="search-results-container">
         {sortedMovies.map((movie) => (
@@ -178,7 +184,11 @@ const SearchResult = () => {
         />
       </div>
 
-      <FilterMovie show={showFilter} hide={() => showFilterModal(false)} handleApplyGenres={handleApply} />
+      <FilterMovie
+        show={showFilter}
+        hide={() => showFilterModal(false)}
+        handleApplyGenres={handleApply}
+      />
     </div>
   );
 };

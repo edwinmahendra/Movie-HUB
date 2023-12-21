@@ -16,8 +16,8 @@ export const Bookmark = () => {
 
   useEffect(() => {
     if (userLoggedIn) {
-      setIsLoading(true);
       const fetchBookmarks = async () => {
+        setIsLoading(true);
         try {
           const userDocRef = doc(db, "Users", auth.currentUser.uid);
           const bookmarksCollection = await getDocs(
@@ -26,8 +26,9 @@ export const Bookmark = () => {
           setBookmarks(bookmarksCollection.docs.map((doc) => doc.data()));
         } catch (error) {
           console.error("Error fetching bookmarks:", error);
+        } finally {
+          setIsLoading(false);
         }
-        setIsLoading(false);
       };
       fetchBookmarks();
     }

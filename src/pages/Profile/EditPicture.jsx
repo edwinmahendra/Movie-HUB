@@ -15,7 +15,7 @@ import { getFirestore, doc, updateDoc, getDoc } from "firebase/firestore";
 const EditPicture = () => {
   const navigate = useNavigate();
   const [selectedFile, setSelectedFile] = useState(null);
-  const [imageUrl, setImageUrl] = useState(null); 
+  const [imageUrl, setImageUrl] = useState(null);
   const auth = getAuth();
   const db = getFirestore();
   const storage = getStorage();
@@ -106,7 +106,7 @@ const EditPicture = () => {
         <div className="field-edit-profile p-4">
           <EditProfilePicture
             onFileSelect={handleFileSelect}
-            onRemovePicture={handleRemovePicture} 
+            onRemovePicture={handleRemovePicture}
           />
 
           <Row className="mt-5">

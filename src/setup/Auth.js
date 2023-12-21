@@ -21,7 +21,12 @@ const useAuth = () => {
   // Function to manually set justRegistered (used in the registration process)
   const resetJustRegistered = () => setJustRegistered(false);
 
-  return { currentUser, justRegistered, setJustRegistered, resetJustRegistered };
+  return {
+    currentUser,
+    justRegistered,
+    setJustRegistered,
+    resetJustRegistered,
+  };
 };
 
 export default useAuth;

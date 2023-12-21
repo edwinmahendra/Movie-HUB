@@ -1,0 +1,31 @@
+{
+  "files": {
+    "main.css": "/moviehub/static/css/main.84a39985.css",
+    "main.js": "/moviehub/static/js/main.6c31d968.js",
+    "static/js/787.a90f507a.chunk.js": "/moviehub/static/js/787.a90f507a.chunk.js",
+    "static/media/loginbg.svg": "/moviehub/static/media/loginbg.7250f20996e4a8fb7b7a.svg",
+    "static/media/registerbg.svg": "/moviehub/static/media/registerbg.ba5f369b78a46c7f2b4d.svg",
+    "static/media/mainimage.png": "/moviehub/static/media/mainimage.bda793e4ec1b2cb74603.png",
+    "static/media/404.png": "/moviehub/static/media/404.2c7cdedd0e7b44cdd2b4.png",
+    "static/media/logo.svg": "/moviehub/static/media/logo.12f711b244df56bd5852a8f84cfb34ec.svg",
+    "static/media/placeholder_poster_land.png": "/moviehub/static/media/placeholder_poster_land.b753a68441868fbb3aa5.png",
+    "static/media/sample_poster_land.jpg": "/moviehub/static/media/sample_poster_land.f94915f849333285bef2.jpg",
+    "static/media/placeholder_poster_portrait.png": "/moviehub/static/media/placeholder_poster_portrait.5ed52dd9ba109c67f160.png",
+    "static/media/instagram.svg": "/moviehub/static/media/instagram.91851497dcbc0b5d9b5cc92ef20d7436.svg",
+    "static/media/twitter.svg": "/moviehub/static/media/twitter.ade0958d91fd44d8da1092fc21aa4d65.svg",
+    "static/media/eye-off.svg": "/moviehub/static/media/eye-off.c8a04475cc41c8eb85cb16e94d4215e0.svg",
+    "static/media/youtube.svg": "/moviehub/static/media/youtube.c47beb94bac08813e8f8f73d7d6db02a.svg",
+    "static/media/eye.svg": "/moviehub/static/media/eye.97ef74ae63c6cd40256c76e3bfee0dcb.svg",
+    "index.html": "/moviehub/index.html",
+    "static/media/search.svg": "/moviehub/static/media/search.12aab31f8cb6fc879e9c62eaf7337714.svg",
+    "static/media/bookmark.svg": "/moviehub/static/media/bookmark.2578fd8e17e322c9ed289e8d15138401.svg",
+    "static/media/bookmark-off.svg": "/moviehub/static/media/bookmark-off.28dd93cb88a356171083c4393c17090a.svg",
+    "main.84a39985.css.map": "/moviehub/static/css/main.84a39985.css.map",
+    "main.6c31d968.js.map": "/moviehub/static/js/main.6c31d968.js.map",
+    "787.a90f507a.chunk.js.map": "/moviehub/static/js/787.a90f507a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.84a39985.css",
+    "static/js/main.6c31d968.js"
+  ]
+}

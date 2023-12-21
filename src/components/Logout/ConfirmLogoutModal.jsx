@@ -22,15 +22,15 @@ const ConfirmLogoutModal = ({ show, handleClose }) => {
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Logoff</Modal.Title>
+        <Modal.Title>Logout</Modal.Title>
       </Modal.Header>
-      <Modal.Body>Are you sure you want to log off?</Modal.Body>
+      <Modal.Body>Are you sure you want to logout?</Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
           Cancel
         </Button>
         <Button variant="primary" onClick={handleLogout}>
-          Logoff
+          Logout
         </Button>
       </Modal.Footer>
     </Modal>

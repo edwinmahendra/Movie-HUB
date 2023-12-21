@@ -44,19 +44,7 @@ const EditPicture = () => {
 
   const handleRemovePicture = async () => {
     setSelectedFile(null);
-    const userDocRef = doc(db, "Users", auth.currentUser.uid);
-    updateDoc(userDocRef, { profilePicture: defaultImage })
-      .then(() => {
-        setImageUrl(defaultImage);
-        toast.success("Profile picture removed.", {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      })
-      .catch((error) => {
-        toast.error("Failed to remove profile picture.", {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      });
+    setImageUrl(defaultImage);
   };
 
   const handleSave = async () => {
@@ -71,7 +59,7 @@ const EditPicture = () => {
               toast.success("Profile Picture Updated Successfully", {
                 position: toast.POSITION.TOP_RIGHT,
               });
-              navigate("/profile");
+              setTimeout(() => navigate("/profile"), 3000);
             });
           });
         })
@@ -84,6 +72,7 @@ const EditPicture = () => {
       toast.success("Profile Picture Updated Successfully", {
         position: toast.POSITION.TOP_RIGHT,
       });
+      setTimeout(() => navigate("/profile"), 3000);
     }
   };
 
